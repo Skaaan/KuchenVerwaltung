@@ -42,7 +42,7 @@ public class ConsoleImp implements Console {   // This class is for managing inp
 
     public static void runAddHersteller(){
         Scanner scan = getScanner();
-        System.out.print("[Herstellername] Enter a Hersteller: ");
+        System.err.print("[Herstellername] Enter a Hersteller: ");
         hv.create(scan.nextLine());
     }
 
