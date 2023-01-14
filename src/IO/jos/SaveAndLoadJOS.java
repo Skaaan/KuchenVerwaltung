@@ -12,7 +12,8 @@ public class SaveAndLoadJOS {
     private static final String filename = "src/IO/jos/savedKuchenVerwaltung.txt";
 
 
-
+//todo
+    // signature use stream anstatt filename , for tests, so kannst du keine tests schreiben
     public static void serialize(String filename, KuchenVerwaltung obj){
         try {
             FileOutputStream fileOut = new FileOutputStream(filename);

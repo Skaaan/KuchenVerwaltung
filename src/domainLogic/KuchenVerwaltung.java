@@ -44,6 +44,8 @@ public class KuchenVerwaltung implements java.io.Serializable {
      * @throws IllegalArgumentException if the kuchen dont has a Hersteller
      * @throws IllegalArgumentException if the type of the kuchen is null
      */
+
+    //todo herstelle check  ,  use in cli
     public synchronized void create(KuchenTyp kuchentyp, HerstellerImp hersteller, BigDecimal price, Collection<Allergen> allergens, int naehrwert, Duration haltbarkeit, String... topping) throws IllegalArgumentException {      //Quelle:  https://stackoverflow.com/questions/44640485/implement-a-crud-in-spring-using-an-arraylist-of-a-class
         KuchenImp kuchen = null;
         if (hersteller == null || hersteller.getName() == null)
@@ -112,7 +114,7 @@ public class KuchenVerwaltung implements java.io.Serializable {
      * @param fachnummer of the Kuchen to be removed
      * @throws NullPointerException if the list of Kremkuchen is empty
      */
-    public synchronized void delete(int fachnummer) throws NullPointerException {
+    public synchronized void delete(int fachnummer) throws NullPointerException,IllegalArgumentException {
 
         if (listOfKuchen.get(fachnummer) == null) {
             throw new IllegalArgumentException("Fachnummer" + fachnummer + "is empty");
@@ -126,6 +128,10 @@ public class KuchenVerwaltung implements java.io.Serializable {
 
         }
     }
+
+
+
+
 
 
 }
