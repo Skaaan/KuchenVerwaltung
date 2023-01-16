@@ -21,65 +21,64 @@ import static java.lang.String.valueOf;
 
 
 
-public class ConsoleImp implements Console {   // This class is for managing inputs with scanners, and catching exceptions
+public class ConsoleImp implements Console {
 
-
-    private static final List<Allergen> a1 = new LinkedList<>(Collections.singleton(Allergen.Erdnuss));
-    private static final Duration d1 = Duration.ofDays(1);
-    private static final BigDecimal p1 =new BigDecimal("1.5");
-    private static final HerstellerImp h1 = new HerstellerImp("Skander");
-    static KremkuchenImp  kuchen = new KremkuchenImp(h1, a1, 3, d1, p1, new Date(), 0, "NugatKrem"); // vordefiniertes Kuchen
-
-
+    // Creating a Scanner object
     private static final Scanner scan= new Scanner(System.in);
+    private static final Scanner myKuchenType = new Scanner(System.in);
+    private static final Scanner myHersteller = new Scanner(System.in);
+    private static final Scanner myPrice = new Scanner(System.in);
+    private static final Scanner myAllergen = new Scanner(System.in);
+    private static final Scanner myNaehrwert = new Scanner(System.in);
+    private static final Scanner myDuration = new Scanner(System.in);
+    private static final Scanner myTopping1 = new Scanner(System.in);
+    private static final Scanner myTopping2 = new Scanner(System.in);
+
 
     public static Scanner getScanner(){
         return scan;
     }
 
-
-
-
-    public static void runAddHersteller(){
-        Scanner scan = getScanner();
-        System.err.print("[Herstellername] Enter a Hersteller: ");
-        hv.create(scan.nextLine());
-    }
-
-
-
-    // runAddKuchen uses a vordefiniertes kuchen just for CLI prototype.
-    public static void runAddKuchen(){
-        kv.create(kuchen);
-    }
-
-
-
-    // runAddKuchen1 for later Oprations in the Beleg
-    public static void runAddKuchen1(){
-        Scanner scan = getScanner();
-        while(true) {
+    public static void runAddKuchen() throws IllegalStateException {
             try {
-                System.out.print("[Kuchen-Typ] [Herstellername] [Preis] [Naehrwert] [Haltbarkeit] [kommaseparierte Allergene, einzelnes" + "Komma für keine] [[Obstsorte]] [[Kremsorte]] Enter a Kuchen: ");
-                String[] s = scan.nextLine().split(" ");
+                System.out.println("KuchenType (0-->Kremkuchen, 1-->Obstkuchen, 2-->Obsttorte) : ");
+                KuchenTyp typ = KuchenTyp.values()[Integer.parseInt(myKuchenType.nextLine())];
 
-                KuchenTyp kuchentyp = KuchenTyp.valueOf(s[0]);
-                HerstellerImp hersteller = new HerstellerImp(s[1]);
-                BigDecimal price = BigDecimal.valueOf(Long.parseLong(s[2]));
-                int naehrwert = parseInt(s[3]);
-                Duration haltbarkeit = Duration.parse(s[4]);
-                Set<Allergen> allergens = Collections.singleton(Allergen.valueOf(s[5]));
-                String topping0 = valueOf(s[6]);
-                String topping1 = valueOf(s[7]);
+                System.out.println("Hersteller: ");
+                String hersteller = myHersteller.nextLine();  // Read user input
+                HerstellerImp h = new HerstellerImp(hersteller);
 
+                System.out.println("Price: ");
+                String doublePrice = myPrice.nextLine();  // Read user input
+                BigDecimal price = new BigDecimal(doublePrice);
 
-                kv.create(kuchentyp, hersteller, price, allergens, naehrwert, haltbarkeit, topping0, topping1);
-                break; }
-            catch(IllegalArgumentException e){
-                System.out.println("Enter valid Kuchen");
+                Collection<Allergen> allergen = new LinkedList<>();
+
+                System.out.println("Allergen: ");
+                String allergenInput = myAllergen.next();  // Read user input
+                allergen.add(Allergen.valueOf(allergenInput));
+
+                System.out.println("Naehrwert: ");
+                int naehrwert = myNaehrwert.nextInt();  // Read user input
+
+                System.out.println("Duration: ");
+                Duration duration = Duration.ofDays(Integer.parseInt(myDuration.nextLine()));
+
+                System.out.println("Topping1: ");
+                String topping1 = myTopping1.nextLine();  // Read user input
+
+                System.out.println("Topping2: ");
+                String topping2 = myTopping2.nextLine();  // Read user input
+
+                kv.create(typ, h, price, allergen, naehrwert, duration, topping1, topping2);
+               hv.create(hersteller);
+
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
             }
-        }
+
     }
+
 
     public static void showHersteller() {
         for(int i=0; i< hv.read().length; i++ ){
@@ -112,7 +111,7 @@ public class ConsoleImp implements Console {   // This class is for managing inp
                 kv.delete(fachnummer);
                 break; }
             catch(IllegalArgumentException e){
-                System.out.println("Enter valid Fachnummer (int):");
+                System.out.println("Enter valid Fachnummer (int!!):");
             }
         }
     }
@@ -125,7 +124,7 @@ public class ConsoleImp implements Console {   // This class is for managing inp
 
 
     public static void execute() {
-        System.err.println("""
+        System.out.println("""
                      :c Wechsel in den Einfügemodus
                      :d Wechsel in den Löschmodus
                      :r Wechsel in den Anzeigemodus
@@ -134,22 +133,22 @@ public class ConsoleImp implements Console {   // This class is for managing inp
                     """);
         try(Scanner scan = new Scanner(System.in)) {
             do {
-                System.err.println("enter Command");
+                System.out.println("enter Command");
                 String token = scan.next();
                 switch (token) {
                     case ":c" -> {
-                        ConsoleImp.runAddHersteller();
-                        System.err.println("Hersteller inserted");
+                       /* ConsoleImp.runAddHersteller();
+                        System.err.println("Hersteller inserted"); */
                         ConsoleImp.runAddKuchen();
-                        System.err.println("Kuchen inserted");
+                        System.out.println("Kuchen inserted");
                     }
                     case ":d" -> {
                         ConsoleImp.rundDeleteKuchen();
-                        System.err.println("Kuchen deleted");
+                        System.out.println("Kuchen deleted");
                     }
                     case ":u" -> {
                         ConsoleImp.runUpdateKuchen();
-                        System.err.println("Kuchen up to date");
+                        System.out.println("Kuchen up to date");
                     }
                     case ":r" -> ConsoleImp.runShow();
                 }

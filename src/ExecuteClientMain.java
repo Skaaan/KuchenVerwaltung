@@ -1,8 +1,8 @@
-package net;
+import net.Client;
 
 import java.io.IOException;
 
-public class ClientMain {
+public class ExecuteClientMain {
 
     public static void main(String[] args) throws IOException {
 

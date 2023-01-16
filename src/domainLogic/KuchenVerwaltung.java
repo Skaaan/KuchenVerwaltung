@@ -15,6 +15,7 @@ public class KuchenVerwaltung implements java.io.Serializable {
 
     private final List<KuchenImp> listOfKuchen = new ArrayList<>();
 
+
     //https://stackoverflow.com/questions/6270132/create-a-custom-event-in-java/6270150#6270150   Hier
 
 
@@ -44,6 +45,10 @@ public class KuchenVerwaltung implements java.io.Serializable {
      * @throws IllegalArgumentException if the kuchen dont has a Hersteller
      * @throws IllegalArgumentException if the type of the kuchen is null
      */
+
+
+
+
 
     //todo herstelle check  ,  use in cli
     public synchronized void create(KuchenTyp kuchentyp, HerstellerImp hersteller, BigDecimal price, Collection<Allergen> allergens, int naehrwert, Duration haltbarkeit, String... topping) throws IllegalArgumentException {      //Quelle:  https://stackoverflow.com/questions/44640485/implement-a-crud-in-spring-using-an-arraylist-of-a-class
