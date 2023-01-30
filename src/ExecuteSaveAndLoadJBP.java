@@ -1,6 +1,6 @@
-import domainLogic.HerstellerImp;
-import domainLogic.KuchenImp;
-import domainLogic.KuchenVerwaltung;
+import domainLogic.hersteller.HerstellerImp;
+import domainLogic.kuchen.KuchenVerwaltung;
+import domainLogic.kuchen.KuchenImp;
 import vertrag.Allergen;
 
 import java.math.BigDecimal;
@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static IO.jbp.SaveAndLoadJBP.*;
-import static IO.jos.SaveAndLoadJOS.loadKuchenVerwaltungJOS;
 import static vertrag.Allergen.Erdnuss;
 import static vertrag.KuchenTyp.Kremkuchen;
 
@@ -18,6 +17,7 @@ public class ExecuteSaveAndLoadJBP {
 
 
     public static void main(String[] args) throws Exception {
+
         KuchenVerwaltung obj = new KuchenVerwaltung();
 
         Collection<Allergen> a = new LinkedList<>();

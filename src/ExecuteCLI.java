@@ -1,3 +1,5 @@
+import java.io.Serializable;
+
 import static CLI.ConsoleImp.execute;
 
 

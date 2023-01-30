@@ -5,12 +5,12 @@ Die Zahl in der Klammer sind die jeweiligen Punkte für die Bewertung.
 Ergänzende Anmerkungen bitte auch _kursiv setzen_.
 
 ## Entwurf (12)
-- [ ] **Schichtenaufteilung** (4)
+- [x] **Schichtenaufteilung** (4)
 - [ ] Architekturdiagramm (1)
 - [ ] Zuständigkeit (2)
-- [ ] Paketierung (2)
-- [ ] Benennung (2)
-- [ ] keine Duplikate (1)
+- [x] Paketierung (2)
+- [x] Benennung (2)
+- [x] keine Duplikate (1)
 
 ## Tests (28)
 - [ ] **Testqualität** (7)
@@ -31,19 +31,19 @@ Ergänzende Anmerkungen bitte auch _kursiv setzen_.
 - **keine Ablauffehler** (5)
 
 ## Basisfunktionalität (12)
-- [ ] **CRUD** (2)
-- [ ] **CLI** (2)
+- [x] **CRUD** (2)
+- [x] **CLI** (2)
   * Syntax gemäß Anforderungen
-- [ ] **Simulation** (2)
+- [x] **Simulation** (2)
   * ohne race conditions
-- [ ] **GUI** (2)
-- [ ] **I/O** (2)
+- [x] **GUI** (2)
+- [x] **I/O** (2)
   * in CLI oder GUI integriert
-- [ ] **Net** (2)
+- [x] **Net** (2)
 
 ## Funktionalität (22)
-- [ ] vollständige GL (2)
-- [ ] threadsichere GL (1)
+- [x] vollständige GL (2)
+- [x] threadsichere GL (1)
 - [ ] vollständiges CLI inkl. alternatives CLI (2)
   * _angeben welche Funktionalität im alternativen CLI deaktiviert_
 - [ ] vollständiges GUI (2)

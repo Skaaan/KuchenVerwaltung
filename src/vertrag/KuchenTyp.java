@@ -8,4 +8,7 @@ public enum KuchenTyp {
     private KuchenTyp() {
     }
 
+
+
+
 }

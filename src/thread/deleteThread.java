@@ -1,7 +1,6 @@
 package thread;
 
-import domainLogic.KuchenImp;
-import domainLogic.KuchenVerwaltung;
+import domainLogic.kuchen.KuchenVerwaltung;
 
 public class deleteThread extends Thread{
 
@@ -18,9 +17,9 @@ public class deleteThread extends Thread{
     public  void run() {
             while (true) {
                 synchronized(kv){
-                    if (kv.read().length != 0) {    // generating random index from the list, Source: https://www.baeldung.com/java-random-list-element
-                    int randomIndex = (int) ((Math.random() * kv.read().length));    //* kv.read().length :random int between 0 and array length
-                    kv.delete(randomIndex);
+                    if (kv.readArrayOfKuchen().length != 0) {    // generating random index from the list, Source: https://www.baeldung.com/java-random-list-element
+                    int randomIndex = (int) ((Math.random() * kv.readArrayOfKuchen().length));    //* kv.read().length :random int between 0 and array length
+                    kv.deleteKuchen(randomIndex);
                     System.err.println("Deleted Kuchen");
                 }
                 }

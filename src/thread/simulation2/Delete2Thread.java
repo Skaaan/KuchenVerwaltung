@@ -1,7 +1,7 @@
 package thread.simulation2;
 
-import domainLogic.KuchenImp;
-import domainLogic.KuchenVerwaltung;
+import domainLogic.kuchen.KuchenVerwaltung;
+import domainLogic.kuchen.KuchenImp;
 
 public class Delete2Thread extends Thread{
 
@@ -18,9 +18,9 @@ public class Delete2Thread extends Thread{
     public  void run() {
         while (true) {
             synchronized(kv){
-                if (kv.read().length != 0) {
+                if (kv.readArrayOfKuchen().length != 0) {
                   int oldesKuchenFachnummer = getOldestKuchen(kv).getFachnummer();
-                    kv.delete(oldesKuchenFachnummer );
+                    kv.deleteKuchen(oldesKuchenFachnummer );
                     System.err.println("Deleted oldest Kuchen with Fachnummer: "+ oldesKuchenFachnummer +"!");
                 }
                 notify();
@@ -31,10 +31,10 @@ public class Delete2Thread extends Thread{
 
 
     private KuchenImp getOldestKuchen(KuchenVerwaltung kv) {
-        KuchenImp oldestKuchen = kv.read()[0];
-        for(int i = 0; i < kv.read().length; i++) {
-            if (oldestKuchen.getInspektionsdatum().compareTo(kv.read()[i].getInspektionsdatum()) > 0) {
-                oldestKuchen = kv.read()[i];
+        KuchenImp oldestKuchen = kv.readArrayOfKuchen()[0];
+        for(int i = 0; i < kv.readArrayOfKuchen().length; i++) {
+            if (oldestKuchen.getInspektionsdatum().compareTo(kv.readArrayOfKuchen()[i].getInspektionsdatum()) > 0) {
+                oldestKuchen = kv.readArrayOfKuchen()[i];
             }
         }
         return oldestKuchen;

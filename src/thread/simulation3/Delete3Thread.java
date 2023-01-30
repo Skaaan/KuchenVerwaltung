@@ -1,7 +1,7 @@
 package thread.simulation3;
 
-import domainLogic.KuchenImp;
-import domainLogic.KuchenVerwaltung;
+import domainLogic.kuchen.KuchenVerwaltung;
+import domainLogic.kuchen.KuchenImp;
 
 import java.util.Random;
 
@@ -16,7 +16,7 @@ public class Delete3Thread extends Thread{
 
         private int randomInt() {
             Random randomNum = new Random();
-            int randomInt = randomNum.nextInt(kv.read().length);
+            int randomInt = randomNum.nextInt(kv.readArrayOfKuchen().length);
             return randomInt;
         }
 
@@ -25,10 +25,10 @@ public class Delete3Thread extends Thread{
         public void run() {
             while (true) {
                 synchronized (kv) {
-                    if (kv.read().length != 0) {
+                    if (kv.readArrayOfKuchen().length != 0) {
                         int oldesKuchenFachnummer = getOldestKuchen(kv).getFachnummer();
-                        for(int i=0; i< kv.read().length; i++) {
-                            kv.delete(oldesKuchenFachnummer);
+                        for(int i = 0; i< kv.readArrayOfKuchen().length; i++) {
+                            kv.deleteKuchen(oldesKuchenFachnummer);
                             System.err.println("Deleted oldest Kuchen with Fachnummer: " + oldesKuchenFachnummer + "!");
                         }
                     }
@@ -39,10 +39,10 @@ public class Delete3Thread extends Thread{
 
 
         private KuchenImp getOldestKuchen(KuchenVerwaltung kv) {
-            KuchenImp oldestKuchen = kv.read()[0];
-            for (int i = 0; i < kv.read().length; i++) {
-                if (oldestKuchen.getInspektionsdatum().compareTo(kv.read()[i].getInspektionsdatum()) > 0) {
-                    oldestKuchen = kv.read()[i];
+            KuchenImp oldestKuchen = kv.readArrayOfKuchen()[0];
+            for (int i = 0; i < kv.readArrayOfKuchen().length; i++) {
+                if (oldestKuchen.getInspektionsdatum().compareTo(kv.readArrayOfKuchen()[i].getInspektionsdatum()) > 0) {
+                    oldestKuchen = kv.readArrayOfKuchen()[i];
                 }
             }
             return oldestKuchen;

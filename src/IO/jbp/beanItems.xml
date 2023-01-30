@@ -2,7 +2,7 @@
 <java version="17" class="java.beans.XMLDecoder">
  <object class="java.util.ArrayList">
   <void method="add">
-   <object class="domainLogic.KremkuchenImp">
+   <object class="domainLogic.kuchen.KremkuchenImp">
     <void property="inspektionsdatum">
      <object class="java.util.Date">
       <long>1673365215942</long>
@@ -11,7 +11,7 @@
    </object>
   </void>
   <void method="add">
-   <object class="domainLogic.KremkuchenImp">
+   <object class="domainLogic.kuchen.KremkuchenImp">
     <void property="fachnummer">
      <int>1</int>
     </void>
@@ -23,7 +23,7 @@
    </object>
   </void>
   <void method="add">
-   <object class="domainLogic.KremkuchenImp">
+   <object class="domainLogic.kuchen.KremkuchenImp">
     <void property="fachnummer">
      <int>2</int>
     </void>

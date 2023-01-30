@@ -1,6 +1,10 @@
 package gui.controllers;
 
-import domainLogic.*;
+import domainLogic.Automat;
+import domainLogic.hersteller.HerstellerImp;
+import domainLogic.hersteller.HerstellerVerwaltung;
+import domainLogic.kuchen.KuchenImp;
+import domainLogic.kuchen.KuchenVerwaltung;
 import gui.GUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,8 +21,10 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import static IO.SaveAndLoad.loadKuchenVerwaltung;
-import static IO.SaveAndLoad.saveKuchenVerwaltung;
+import static IO.jos.SaveAndLoadJOS.loadAutomatJOS;
+import static IO.jos.SaveAndLoadJOS.saveAutomatJOS;
+import static vertrag.KuchenTyp.Kremkuchen;
+import static vertrag.KuchenTyp.Obstkuchen;
 
 
 public class ControllerManageKuchenStage extends GUI {
@@ -42,6 +48,12 @@ public class ControllerManageKuchenStage extends GUI {
     //update Kuchen variables
     String updateKuchen;
 
+    //create Hersteller variables
+    String createHersteller;
+    //delete Hersteller variables
+    String deleteHersteller;
+
+
 
     @FXML
     private Button buttonClickSubmit;
@@ -55,6 +67,14 @@ public class ControllerManageKuchenStage extends GUI {
     private Button buttonClickLoad;
 
     @FXML
+    private Button buttonClickCreateHersteller;
+    @FXML
+    private Button buttonClickDeleteHersteller;
+
+    @FXML
+    private Button buttonClickSortByHersteller;
+
+    @FXML
     private ChoiceBox<String> choiceBoxKuchenType;
     private final String[] typeKuchen = {"Kremkuchen","Obstkuchen","Obsttorte"};
 
@@ -64,13 +84,8 @@ public class ControllerManageKuchenStage extends GUI {
     private TextField textFieldPrice;
 
 
-
     @FXML
-    private ChoiceBox<String> choiceBoxAllergen;
-    private final String[] allergen = {"Gluten","Erdnuss","Haselnuss","Sesamsamen"};
-
-
-
+    private TextField textFieldAllergen;
     @FXML
     private TextField textFieldNaehrwert;
     @FXML
@@ -84,11 +99,26 @@ public class ControllerManageKuchenStage extends GUI {
     @FXML
     private TextField textFieldUpdateKuchen;
 
+    @FXML
+    private TextField textFieldCreateHersteller;
+    @FXML
+    private TextField textFieldDeleteHersteller;
 
     @FXML
-    private ListView<KuchenImp> myListView;
+    private TextField textFieldSortByHersteller;
+
+    @FXML
+    private ListView<KuchenImp> myListViewKuchen;
+    @FXML
+    private ListView<String> myListViewHersteller;
+    @FXML
+    private ListView<KuchenImp> myListViewKuchenSortedByHersteller;
+
 
     KuchenVerwaltung kv = new KuchenVerwaltung();
+    HerstellerVerwaltung hv = new HerstellerVerwaltung();
+
+    Automat automat = new Automat(kv,hv);
 
 
 
@@ -97,8 +127,40 @@ public class ControllerManageKuchenStage extends GUI {
         choiceBoxKuchenType.setValue("Select KuchenType");
         choiceBoxKuchenType.getItems().addAll(typeKuchen);
 
+        /*
         choiceBoxAllergen.setValue("Select Allergen");
         choiceBoxAllergen.getItems().addAll(allergen);
+         */
+
+
+        buttonClickCreateHersteller.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(javafx.event.ActionEvent event) {
+                createHersteller = buttonClickCreateHersteller.getText();
+                String hersteller =textFieldCreateHersteller.getText() ;
+                automat.createHersteller( hersteller );
+                myListViewHersteller.getItems().add(hersteller);
+                allert.setAlertType(Alert.AlertType.INFORMATION);
+                allert.setContentText("Hersteller: (" + hersteller + ") created"  );
+                allert.show();
+                textFieldCreateHersteller.setText("");
+            }
+        });
+
+
+        buttonClickDeleteHersteller.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(javafx.event.ActionEvent event) {
+                deleteHersteller = buttonClickDeleteHersteller.getText();
+                String hersteller =textFieldDeleteHersteller.getText() ;
+                automat.deleteHersteller( hersteller );
+                myListViewHersteller.getItems().remove(hersteller);
+                allert.setAlertType(Alert.AlertType.INFORMATION);
+                allert.setContentText("Hersteller: (" + hersteller + ") deleted"  );
+                allert.show();
+                textFieldDeleteHersteller.setText("");
+            }
+        });
 
 
         buttonClickSubmit.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
@@ -107,7 +169,6 @@ public class ControllerManageKuchenStage extends GUI {
                 kuchenTyp = KuchenTyp.valueOf(choiceBoxKuchenType.getValue());
                 System.err.println(kuchenTyp);
                 choiceBoxKuchenType.setValue("Select KuchenType");
-
 
                 hersteller = new HerstellerImp( textFieldHersteller.getText());
                 System.err.println(hersteller);
@@ -118,10 +179,38 @@ public class ControllerManageKuchenStage extends GUI {
                 textFieldPrice.setText("");
 
 
-                Collection<Allergen> allerg = new LinkedList<>();
-                allerg.add(Allergen.valueOf(choiceBoxAllergen.getValue()));
-                System.err.println(choiceBoxAllergen.getValue());
-                choiceBoxAllergen.setValue("Select Allergen");
+                Collection<Allergen> allergen = new LinkedList<>();
+                System.out.println("[Allergen1],[Allergen2],[Allergen3],[Allergen4] (Allergen input is separated with [,] ) : ");
+                String allerg = textFieldAllergen.getText(); // Read user input
+                String[] allergParts = new String[4];
+                allergParts = allerg.split(",");
+                if(allergParts.length == 1){
+                    String allerg1  = allergParts[0];
+                    allergen.add(Allergen.valueOf(allerg1));
+                } else if(allergParts.length == 2){
+                    String allerg1  = allergParts[0];
+                    String allerg2  = allergParts[1];
+                    allergen.add(Allergen.valueOf(allerg1));
+                    allergen.add(Allergen.valueOf(allerg2));
+                } else if(allergParts.length == 3){
+                    String allerg1  = allergParts[0];
+                    String allerg2  = allergParts[1];
+                    String allerg3  = allergParts[2];
+                    allergen.add(Allergen.valueOf(allerg1));
+                    allergen.add(Allergen.valueOf(allerg2));
+                    allergen.add(Allergen.valueOf(allerg3));
+                } else if(allergParts.length == 4){
+                    String allerg1  = allergParts[0];
+                    String allerg2  = allergParts[1];
+                    String allerg3  = allergParts[2];
+                    String allerg4  = allergParts[3];
+                    allergen.add(Allergen.valueOf(allerg1));
+                    allergen.add(Allergen.valueOf(allerg2));
+                    allergen.add(Allergen.valueOf(allerg3));
+                    allergen.add(Allergen.valueOf(allerg4));
+                }
+                System.err.println(allerg);
+                textFieldAllergen.setText("");
 
 
                 naehrwert = Integer.parseInt(textFieldNaehrwert.getText() );
@@ -140,10 +229,13 @@ public class ControllerManageKuchenStage extends GUI {
                 System.err.println(topping2);
                 textFieldTopping2.setText("");
 
+                if(kuchenTyp.equals(Kremkuchen) || kuchenTyp.equals(Obstkuchen)) {
+                    automat.createKuchen(kuchenTyp, hersteller, price, allergen, naehrwert, durr, topping1);
+                } else {
+                    automat.createKuchen(kuchenTyp, hersteller, price, allergen, naehrwert, durr, topping1, topping2);
+                }
 
-
-                kv.create(kuchenTyp, hersteller, price, allerg, naehrwert, durr, topping1, topping2);
-                myListView.getItems().addAll(     (kv.read())[kv.read().length - 1]     );
+                myListViewKuchen.getItems().addAll(     (automat.readArrayOfKuchen())[automat.readArrayOfKuchen().length - 1]     );
                 allert.setAlertType(Alert.AlertType.INFORMATION);
                 allert.setContentText("Kuchen added.");
                 allert.show();
@@ -153,10 +245,10 @@ public class ControllerManageKuchenStage extends GUI {
         buttonClickDelete.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(javafx.event.ActionEvent event) {
-                deleteKuchen = buttonClickDelete.getText();
+                    deleteKuchen = buttonClickDelete.getText();
                     int fachnummer = Integer.parseInt(textFieldDeleteKuchen.getText()) ;
-                    kv.delete( fachnummer );
-                myListView.getItems().remove(fachnummer);
+                    automat.delete( fachnummer );
+                    myListViewKuchen.getItems().remove(fachnummer);
                     allert.setAlertType(Alert.AlertType.INFORMATION);
                     allert.setContentText("Kuchen with fachnummer " + fachnummer + " deleted"  );
                     allert.show();
@@ -170,10 +262,10 @@ public class ControllerManageKuchenStage extends GUI {
             public void handle(javafx.event.ActionEvent event) {
                 updateKuchen = buttonClickUpdate.getText();
                 int fachnummer = Integer.parseInt(textFieldUpdateKuchen.getText()) ;
-                kv.update( fachnummer );
-                myListView.refresh();
+                automat.update( fachnummer );
+                myListViewKuchen.refresh();
                 allert.setAlertType(Alert.AlertType.INFORMATION);
-                allert.setContentText("Kuchen with fachnummer " + fachnummer + " deleted"  );
+                allert.setContentText("Kuchen with fachnummer " + fachnummer + " updated"  );
                 allert.show();
                 textFieldDeleteKuchen.setText("");
             }
@@ -182,16 +274,30 @@ public class ControllerManageKuchenStage extends GUI {
         buttonClickSave.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(javafx.event.ActionEvent event) {
-                saveKuchenVerwaltung( kv);
+                saveAutomatJOS( automat);
             }
         });
 
         buttonClickLoad.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(javafx.event.ActionEvent event) {
-                myListView.getItems().addAll(     (loadKuchenVerwaltung().read() )     );
+                myListViewKuchen.getItems().addAll(     (loadAutomatJOS().readArrayOfKuchen() )     );
             }
         });
+
+        buttonClickSortByHersteller.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(javafx.event.ActionEvent event) {
+
+                myListViewKuchenSortedByHersteller.getItems().clear();
+                hersteller = new HerstellerImp(textFieldSortByHersteller.getText() ) ;
+                myListViewKuchenSortedByHersteller.getItems().addAll(  (automat.getArrayOfKuchenByHersteller(hersteller.getName()))  )    ;
+                allert.setAlertType(Alert.AlertType.INFORMATION);
+                allert.setContentText("List of Kuchen With Hersteller (" + hersteller.getName() + ")");
+                allert.show();
+            }
+        });
+
 
 
 

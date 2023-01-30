@@ -1,8 +1,8 @@
 package IO.jbp;
 
 
-import domainLogic.KuchenImp;
-import domainLogic.KuchenVerwaltung;
+import domainLogic.kuchen.KuchenVerwaltung;
+import domainLogic.kuchen.KuchenImp;
 
 
 import java.beans.XMLDecoder;

@@ -1,26 +1,24 @@
 package thread.simulation1;
 
-import domainLogic.KuchenImp;
-import domainLogic.KuchenVerwaltung;
+import domainLogic.Automat;
 
 public class Delete1Thread extends Thread{
 
-    KuchenVerwaltung kv;
 
-    public Delete1Thread(KuchenVerwaltung kv){
-        this.kv=kv;
+
+    Automat automat ;
+
+    public Delete1Thread(Automat automat){
+        this.automat=automat;
     }
-
-
-
 
     @Override
     public  void run() {
             while (true) {
-                synchronized(kv){
-                    if (kv.read().length != 0) {
-                    int randomIndex = (int) ((Math.random() * kv.read().length));  // generating random index from the list, Source: https://www.baeldung.com/java-random-list-element   //* kv.read().length :random int between 0 and array length
-                    kv.delete(randomIndex);
+                synchronized(automat){
+                    if (automat.readArrayOfKuchen().length != 0) {
+                    int randomIndex = (int) ((Math.random() * automat.readArrayOfKuchen().length));  // generating random index from the list, Source: https://www.baeldung.com/java-random-list-element   //* kv.read().length :random int between 0 and array length
+                        automat.delete(randomIndex);
                     System.err.println("Deleted Kuchen");
                 }
                 }

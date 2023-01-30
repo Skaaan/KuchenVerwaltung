@@ -1,8 +1,8 @@
 package net;
 
-import domainLogic.HerstellerImp;
-import domainLogic.KuchenImp;
-import domainLogic.KuchenVerwaltung;
+import domainLogic.hersteller.HerstellerImp;
+import domainLogic.kuchen.KuchenImp;
+import domainLogic.kuchen.KuchenVerwaltung;
 import vertrag.Allergen;
 import vertrag.KuchenTyp;
 
@@ -81,10 +81,10 @@ public class Server {
 
                 out.println("Kuchen added ");
             } else if(message.equals(":d")) {
-                kv.delete(1);
+                kv.deleteKuchen(1);
                 out.println("Kuchen deleted ");
             }else if(message.equals(":r")) {
-                for (KuchenImp element : kv.read()) {
+                for (KuchenImp element : kv.readArrayOfKuchen()) {
                     System.out.println(element.toString() );
                 }
             }  else if(message.equals(":u"))  {
