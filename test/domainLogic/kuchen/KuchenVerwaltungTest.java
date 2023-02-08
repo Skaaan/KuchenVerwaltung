@@ -9,6 +9,7 @@ import vertrag.Allergen;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
@@ -21,6 +22,7 @@ class KuchenVerwaltungTest {
 
     private KuchenVerwaltung kv;
 
+    private final HerstellerImp hNull = new HerstellerImp(null);
     private final HerstellerImp h1 = new HerstellerImp("Hersteller1");
     private final HerstellerImp h2 = new HerstellerImp("Hersteller2");
     private final HerstellerImp h3 = new HerstellerImp("Hersteller3");
@@ -44,11 +46,6 @@ class KuchenVerwaltungTest {
         kv = new KuchenVerwaltung();
         d1 = Duration.ofDays(2);
         d2 = Duration.ofDays(5);
-
-        a1.add(Allergen.Erdnuss);
-        a2.add(Allergen.Gluten);
-        a1.add(Allergen.Haselnuss);
-
     }
 
 
@@ -62,15 +59,44 @@ class KuchenVerwaltungTest {
         assertEquals(20, kv.getDefaultCapacity());
     }
 
+    @Test
+    void KuchenVerwaltungConstructor() {
+        //Test for Constructor of Kuchenverwaltung(kuchenList)
+        ArrayList<KuchenImp> kuchenList = new ArrayList<>();
+        KuchenImp kuchen = new KuchenImp();
+        kuchenList.add(kuchen);
+        KuchenVerwaltung kv = new KuchenVerwaltung(kuchenList);
+        assertEquals(kuchenList, kv.listOfKuchen);
+    }
+
+
 
     @Test
-    void create_predefined_Kuchen() {
-        KuchenImp predefKuchen = new KremkuchenImp(Kremkuchen, h1, p1, a1, naehrwert1, d1, new Date(), 0, "NugatKrem");
+    void create_predefinedKuchen_Normal() {
         // Tests if the passed Kremkuchen to listOfKremkuchen is not null
+        KuchenImp predefKuchen = new KremkuchenImp(Kremkuchen, h1, p1, a1, naehrwert1, d1, new Date(), 0, "NugatKrem");
         kv.create(predefKuchen);
         KuchenImp addedKuchen = kv.getListOfKuchen().get(0);
         assertNotNull(addedKuchen);
     }
+
+
+    @Test
+    void create_predefinedKuchen_HerstellerIsNull() {
+        // Tests exception for Hersteller equal null
+        KuchenImp predefKuchen = new KremkuchenImp(Kremkuchen, null, p1, a1, naehrwert1, d1, new Date(), 0, "NugatKrem");
+        assertThrows(IllegalArgumentException.class, ()-> kv.create(predefKuchen) );
+    }
+
+    @Test
+    void create_predefinedKuchen_HerstellerNameIsNull() {
+        // Tests exception for Hersteller.name equal null
+        KuchenImp predefKuchen = new KremkuchenImp(Kremkuchen, hNull, p1, a1, naehrwert1, d1, new Date(), 0, "NugatKrem");
+        assertThrows(IllegalArgumentException.class, ()-> kv.create(predefKuchen) );
+    }
+
+
+
 
     @Test
     void create_KuchenTyp_Kremkuchen() {
@@ -94,6 +120,16 @@ class KuchenVerwaltungTest {
         kv.create(Obsttorte ,h1, p1, a1, naehrwert1, d1, "Apfel", "NugatKrem");
         KuchenImp addedKuchen = kv.getListOfKuchen().get(0);
         assertNotNull(addedKuchen);
+    }
+
+    @Test
+    void create_OutOfCapacity() {
+        // Tests the exception thrown for a capacity of 1 after creating 2 Kuchen in the KuchenVerwaltung
+        //GIVEN
+        kv.setDefaultCapacity(1);
+        //WHEN & THEN
+        kv.create(Obsttorte ,h1, p1, a1, naehrwert1, d1, "Apfel", "NugatKrem");
+        assertThrows(IndexOutOfBoundsException.class, ()->  kv.create(Kremkuchen ,h1, p1, a1, naehrwert1, d1, "Apfel", "NugatKrem") );
     }
 
 
@@ -175,65 +211,77 @@ class KuchenVerwaltungTest {
 
     }
 
-    @Test
-    public void testSortListOfKuchenByType_Kremkuchen() {
-       // Tests the size of the SortedList after sorting kv1
-        // Tests if the Kuchen in  the SortedList  match the given KuchenType Kremkuchen or not
 
+    @Test
+    void SortListOfKuchenByType_Size() {
+        // Tests the size of the SortedList after sorting kv with Obstkuchen
+        //GIVEN
+        kv.create( Kremkuchen ,h1, p1, a1, naehrwert1, d1, "NugatCreme"   );
+        kv.create( Obstkuchen ,h1, p1, a2, naehrwert1, d1, "MangoCreme"   );
+        kv.create( Obsttorte ,h1, p1, a1, naehrwert1, d1, "NugatCreme", "MangoCreme");
+        kv.create( Obstkuchen ,h1, p1, a1, naehrwert1, d1, "KiwiCreme");
+        //WHEN
+        LinkedList<KuchenImp> sortedList = kv.SortListOfKuchenByType(Obstkuchen);
+        //THEN
+        assertEquals(2, sortedList.size());
+    }
+
+    @Test
+    void SortListOfKuchenByType_Kremkuchen() {
+        // Tests if the Kuchen in  the SortedList  match the given KuchenType Kremkuchen or not
         //GIVEN
         kv.create( Kremkuchen ,h1, p1, a1, naehrwert1, d1, "NugatCreme"   );
         kv.create( Obstkuchen ,h1, p1, a2, naehrwert1, d2, "MangoCreme"   );
-        kv.create( Obsttorte ,h1, p1, a1, naehrwert1, d2, "NugatCreme", "MangoCreme");
-        kv.create( Obstkuchen ,h1, p1, a1, naehrwert1, d1, "KiwiCreme");
-
         //WHEN
         LinkedList<KuchenImp> sortedList = kv.SortListOfKuchenByType(Kremkuchen);
         //THEN
-        assertEquals(1, sortedList.size());
         assertEquals(Kremkuchen, sortedList.get(0).getKuchenType());
     }
 
 
     @Test
-    public void testSortListOfKuchenByType_Obstkuchen() {
-        // Tests the size of the SortedList after sorting kv1
+    void SortListOfKuchenByType_Obstkuchen() {
         // Tests if the Kuchen in  the SortedList  match the given KuchenType Obstkuchen or not
-
         //GIVEN
         kv.create( Kremkuchen ,h1, p1, a1, naehrwert1, d1, "NugatCreme"   );
         kv.create( Obstkuchen ,h1, p1, a2, naehrwert1, d1, "MangoCreme"   );
-        kv.create( Obsttorte ,h1, p1, a1, naehrwert1, d1, "NugatCreme", "MangoCreme");
-        kv.create( Obstkuchen ,h1, p1, a1, naehrwert1, d1, "KiwiCreme");
-
         //WHEN
         LinkedList<KuchenImp> sortedList = kv.SortListOfKuchenByType(Obstkuchen);
         //THEN
-        assertEquals(2, sortedList.size());
         assertEquals(Obstkuchen, sortedList.get(0).getKuchenType());
-        assertEquals(Obstkuchen, sortedList.get(1).getKuchenType());
     }
 
 
     @Test
-    public void testSortListOfKuchenByType_Obsttorte() {
-        // Tests the size of the SortedList after sorting kv1
+    void SortListOfKuchenByType_Obsttorte() {
         // Tests the Kuchen in  he SortedList if they match the given KuchenType or not
-
         //GIVEN
         kv.create( Kremkuchen ,h1, p1, a1, naehrwert1, d1, "NugatCreme"   );
-        kv.create( Obstkuchen ,h1, p1, a2, naehrwert1, d1, "MangoCreme"   );
         kv.create( Obsttorte ,h1, p1, a1, naehrwert1, d1, "NugatCreme", "MangoCreme");
-        kv.create( Obstkuchen ,h1, p1, a1, naehrwert1, d1, "KiwiCreme");
 
         //WHEN
         LinkedList<KuchenImp> sortedList = kv.SortListOfKuchenByType(Obsttorte);
         //THEN
-        assertEquals(1, sortedList.size());
         assertEquals(Obsttorte, sortedList.get(0).getKuchenType());
     }
 
     @Test
-    public void testSortListOfKuchenByHersteller() {
+    void SortListOfKuchenByHersteller_size() {
+        // Tests the size of the SortedList after sorting kv
+
+        //GIVEN
+        kv.create( Kremkuchen ,h1, p1, a1, naehrwert1, d1, "NugatCreme"   );
+        kv.create( Obstkuchen ,h2, p1, a2, naehrwert1, d1, "MangoCreme"   );
+        kv.create( Obstkuchen ,h1, p1, a1, naehrwert1, d1, "KiwiCreme");
+
+        // Test sorting by Hersteller1
+        LinkedList<KuchenImp> sortedList = kv.SortListOfKuchenByHersteller("Hersteller1");
+        assertEquals(2, sortedList.size());
+    }
+
+
+    @Test
+    void SortListOfKuchenByHersteller() {
         // Tests the size of the SortedList after sorting kv1
         // Tests the Kuchen in  the SortedList if they match the given Hersteller or not
 
@@ -248,39 +296,59 @@ class KuchenVerwaltungTest {
         assertEquals(2, sortedList.size());
         assertEquals("Hersteller1", sortedList.get(0).getHersteller().getName());
         assertEquals("Hersteller1", sortedList.get(1).getHersteller().getName());
-
-        // Test sorting by Hersteller2
-        sortedList = kv.SortListOfKuchenByHersteller("Hersteller2");
-        assertEquals(1, sortedList.size());
-        assertEquals("Hersteller2", sortedList.get(0).getHersteller().getName());
-
-        // Test sorting by Hersteller3
-        sortedList = kv.SortListOfKuchenByHersteller("Hersteller3");
-        assertEquals(1, sortedList.size());
-        assertEquals("Hersteller3", sortedList.get(0).getHersteller().getName());
     }
 
-
     @Test
-    public void testGetAllergens() {
-        // Tests if the list of allergens (kv1.getAllergens())  contains the added allergens in the created Kuchen or not
-        // Tests the size of kv1.getAllergens()  (the size of the list of all available allergens in kv1)
-
-
+    void GetAllergens_availableAllergens_OneAllergen() {
+        // Tests if the list of allergens (kv.getAllergens())  contains the added allergens in the created Kuchen or not
         //GIVEN
+        a1.add(Allergen.Erdnuss);
         kv.create( Kremkuchen ,h1, p1, a1, naehrwert1, d1, "NugatCreme"   );
         kv.create( Obstkuchen ,h1, p1, a2, naehrwert1, d1, "MangoCreme"   );
         kv.create( Obsttorte ,h1, p1, a1, naehrwert1, d1, "NugatCreme", "MangoCreme");
         kv.create( Obstkuchen ,h1, p1, a1, naehrwert1, d1, "KiwiCreme");
-
         //WHEN
         Collection<Allergen> allergens = kv.getAllergens();
         //THEN
         assertTrue(allergens.contains(Allergen.Erdnuss));
-        assertTrue(allergens.contains(Allergen.Gluten));
-        assertTrue(allergens.contains(Allergen.Haselnuss));
-        assertEquals(3, allergens.size());
     }
+
+
+    @Test
+    void GetAllergens_size_OneAllergen() {
+        // Tests the size of kv.getAllergens()  (the size of the list of all available allergens in kv)
+
+        //GIVEN
+        a1.add(Allergen.Gluten);
+        kv.create( Kremkuchen ,h1, p1, a1, naehrwert1, d1, "NugatCreme"   );
+        kv.create( Obstkuchen ,h1, p1, a2, naehrwert1, d1, "MangoCreme"   );
+        kv.create( Obsttorte ,h1, p1, a1, naehrwert1, d1, "NugatCreme", "MangoCreme");
+        kv.create( Obstkuchen ,h1, p1, a1, naehrwert1, d1, "KiwiCreme");
+        //WHEN
+        Collection<Allergen> allergens = kv.getAllergens();
+        //THEN
+        assertEquals(1, allergens.size());
+    }
+
+
+    @Test
+    void GetAllergens_size_AllAllergens() {
+        // Tests the size of kv.getAllergens()  (the size of the list of all available allergens in kv)
+
+        //GIVEN
+        a1.add(Allergen.Erdnuss);
+        a1.add(Allergen.Gluten);
+        a2.add(Allergen.Haselnuss);
+        a1.add(Allergen.Sesamsamen);
+        kv.create( Kremkuchen ,h1, p1, a1, naehrwert1, d1, "NugatCreme"   );
+        kv.create( Obstkuchen ,h1, p1, a2, naehrwert1, d1, "MangoCreme"   );
+        kv.create( Obsttorte ,h1, p1, a1, naehrwert1, d1, "NugatCreme", "MangoCreme");
+        //WHEN
+        Collection<Allergen> allergens = kv.getAllergens();
+        //THEN
+        assertEquals(4, allergens.size());
+    }
+
 
 
 }

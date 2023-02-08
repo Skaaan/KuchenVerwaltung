@@ -7,13 +7,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import vertrag.Allergen;
+import vertrag.KuchenTyp;
 
 import java.math.BigDecimal;
 import java.time.Duration;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.LinkedList;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static vertrag.KuchenTyp.Kremkuchen;
@@ -34,7 +32,7 @@ class KuchenImpTest {
 
     @BeforeAll
     void setUp() {
-        nameHersteller = "maxMustermann";
+        nameHersteller = "Hersteller1";
         hersteller = new HerstellerImp(nameHersteller);
         allergens = new LinkedList<>();
         allergens.add(Allergen.Haselnuss);
@@ -132,14 +130,15 @@ class KuchenImpTest {
         assertEquals(date, actual);
     }
 
+
+
     @Test
-    void testToString() {
-        //GIVEN
-        //see setUp()
-        //WHEN
-        String actual = testKuchen.toString();
-        //THEN
-        assertNotNull(actual);
+    void kuchen_toString() {
+        KuchenImp kuchen = new KuchenImp(Kremkuchen, new HerstellerImp("Hersteller"), new BigDecimal(1.0),
+                Arrays.asList(Allergen.Gluten), 100, Duration.ofDays(10),
+                new Date(), 1);
+        String expected = "KuchenClass{hersteller=Hersteller, allergen=[Gluten], naehrwert=100, haltbarkeit=PT240H, preis=1, inspektionsdatum="+ new Date()+", fachnummer=1}";
+        assertEquals(expected, kuchen.toString());
     }
 
 

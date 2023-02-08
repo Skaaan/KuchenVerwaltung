@@ -1,38 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <java version="17" class="java.beans.XMLDecoder">
- <object class="java.util.ArrayList">
-  <void method="add">
-   <object class="domainLogic.kuchen.KremkuchenImp">
-    <void property="inspektionsdatum">
-     <object class="java.util.Date">
-      <long>1673365215942</long>
-     </object>
-    </void>
-   </object>
-  </void>
-  <void method="add">
-   <object class="domainLogic.kuchen.KremkuchenImp">
-    <void property="fachnummer">
-     <int>1</int>
-    </void>
-    <void property="inspektionsdatum">
-     <object class="java.util.Date">
-      <long>1673365215942</long>
-     </object>
-    </void>
-   </object>
-  </void>
-  <void method="add">
-   <object class="domainLogic.kuchen.KremkuchenImp">
-    <void property="fachnummer">
-     <int>2</int>
-    </void>
-    <void property="inspektionsdatum">
-     <object class="java.util.Date">
-      <long>1673365215942</long>
-     </object>
-    </void>
-   </object>
-  </void>
- </object>
+ <object class="java.util.ArrayList"/>
 </java>

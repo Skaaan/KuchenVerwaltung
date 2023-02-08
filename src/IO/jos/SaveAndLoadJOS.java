@@ -2,59 +2,66 @@ package IO.jos;
 
 
 import domainLogic.Automat;
+import domainLogic.hersteller.HerstellerVerwaltung;
+import domainLogic.kuchen.KuchenVerwaltung;
+
 
 
 import java.io.*;
 
 
+
 public class SaveAndLoadJOS {
-// Source: https://crunchify.com/how-to-serialize-deserialize-list-of-objects-in-java-java-serialization-example/
 
 
-    private static final String filename = "src/IO/jos/savedKuchenVerwaltung.txt";
+     Automat automat;
 
+    public SaveAndLoadJOS(Automat automat) {
+        this.automat = automat;
+    }
 
-//todo
-    // signature use stream anstatt filename , for tests, so kannst du keine tests schreiben
-    public static void serialize(String filename, Automat automat){
+    private static final String FILENAME = "src/IO/jos/savedKuchenVerwaltung.txt";
+
+    public void serialize(OutputStream out, Automat automat){
         try {
-            FileOutputStream fileOut = new FileOutputStream(filename);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(automat);
-            out.close();
-            fileOut.close();
+            ObjectOutputStream objectOut = new ObjectOutputStream(out);
+            objectOut.writeObject(automat);
+            objectOut.close();
             System.err.println("\nSavingJOS Successful... Checkout your specified output file..\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
-    public static Automat deserialize(String filename){
+    public  Automat deserialize(InputStream in){
         Automat automat = null;
         try {
-            FileInputStream fileIn = new FileInputStream(filename);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-
-            automat = (Automat) in.readObject();
-            in.close();
-            fileIn.close();
-
+            ObjectInputStream objectIn = new ObjectInputStream(in);
+            automat = (Automat) objectIn.readObject();
+            objectIn.close();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return automat;
     }
 
-    public static void saveAutomatJOS(Automat automat) {
-        serialize(filename, automat);
+    public void saveAutomatJOS(Automat automat) {
+        try {
+            FileOutputStream fileOut = new FileOutputStream(FILENAME);
+            serialize(fileOut, automat);
+            fileOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static Automat loadAutomatJOS() {
-         return deserialize(filename);
+    public Automat loadAutomatJOS() {
+        try {
+            FileInputStream fileIn = new FileInputStream(FILENAME);
+            return deserialize(fileIn);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-
-
-
-
 }

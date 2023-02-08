@@ -38,13 +38,17 @@ public class HerstellerVerwaltung implements java.io.Serializable {
      * @param name Hersteller to be removed
      * @throws NullPointerException if the list of Hersteller is empty
      */
-    public void deleteHersteller(String name) throws NullPointerException {
+    public void deleteHersteller(String name) throws NullPointerException, IndexOutOfBoundsException  {
+        if(listOfHersteller.size() == 0) throw new NullPointerException("HerstellerList is empty!");
+        if(containsHersteller(name) == false){
+            throw new IndexOutOfBoundsException("Hersteller (" + name + ") does not exist in the list");
+        }
         for (HerstellerImp h : listOfHersteller) {
             if( h.getName().equals(name)  ){
                 listOfHersteller.remove(h);
+                break;
             }
         }
-        if(listOfHersteller.size() == 0) throw new NullPointerException("HerstellerList is empty!");
     }
 
 
@@ -73,8 +77,12 @@ public class HerstellerVerwaltung implements java.io.Serializable {
     }
 
 
-
-
+    /**
+     *
+     * Check if a hersteller exist in listOfHersteller or not
+     * @param name of Hersteller
+     * @return true if Hersteller exists in the list, and false if Hersteller does not exist in the list
+     */
     public  synchronized boolean containsHersteller(String name) {
         for (HerstellerImp h : listOfHersteller) {
             if (h.getName().equals(name)) {
@@ -83,13 +91,6 @@ public class HerstellerVerwaltung implements java.io.Serializable {
         }
         return false;
     }
-
-
-
-
-
-
-
 
 
 

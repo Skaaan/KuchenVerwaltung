@@ -1,4 +1,6 @@
+import domainLogic.Automat;
 import domainLogic.hersteller.HerstellerImp;
+import domainLogic.hersteller.HerstellerVerwaltung;
 import domainLogic.kuchen.KuchenVerwaltung;
 import domainLogic.kuchen.KuchenImp;
 import vertrag.Allergen;
@@ -18,33 +20,37 @@ public class ExecuteSaveAndLoadJBP {
 
     public static void main(String[] args) throws Exception {
 
-        KuchenVerwaltung obj = new KuchenVerwaltung();
+        KuchenVerwaltung kv = new KuchenVerwaltung();
+        HerstellerVerwaltung hv = new HerstellerVerwaltung();
+        Automat automat = new Automat(kv, hv);
 
-        Collection<Allergen> a = new LinkedList<>();
-        Duration d;
-        BigDecimal p;
-        HerstellerImp h;
-        a.add(Erdnuss);
-        d =  Duration.ofDays(1);
-        p = new BigDecimal("1.5");
-        h = new HerstellerImp("h1");
-        //creating Objects in the KuchenVerwaltung
-        obj.create(Kremkuchen, h, p,a,1,d,"vanilla");
-        obj.create(Kremkuchen, h, p,a,10,d,"Choko");
-        obj.create(Kremkuchen, h, p,a,0,d,"Haselnuss");
+
+
+        Collection<Allergen> a1 = new LinkedList<>();
+        Duration d1;
+        BigDecimal p1;
+        a1.add(Erdnuss);
+        d1 =  Duration.ofDays(1);
+        p1 = new BigDecimal("1.5");
+        HerstellerImp h1 = new HerstellerImp("h1");
+        HerstellerImp h2 = new HerstellerImp("h2");
+
+
+        automat.createHersteller("h1");
+        automat.createHersteller("h2");
+        automat.createKuchen(Kremkuchen, h1, p1,a1,1,d1,"vanilla");
+        automat.createKuchen(Kremkuchen, h2, p1,a1,10,d1,"Choko");
         //saveJBP
-        saveKuchenVerwaltungJBP(obj);
+         saveKuchenVerwaltungJBP(kv);
+
 
         //loadJBP
         List<KuchenImp> loadedItems  ;
-        loadedItems = loadKuchenVerwaltungJBP();
+        loadedItems = (List<KuchenImp>) loadKuchenVerwaltungJBP();
 
             for(int i=0;i<loadedItems.size();i++){
                 System.out.println(loadedItems.get(i));
             }
-
-
-
 
 
     }

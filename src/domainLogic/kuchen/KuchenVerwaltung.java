@@ -25,9 +25,9 @@ public class KuchenVerwaltung implements java.io.Serializable {
         this.defaultCapacity = defaultCapacity;
     }
 
-    int defaultCapacity = 30;
+    int defaultCapacity = 30; // TODO Cap in cosnt geben
 
-    private ArrayList<KuchenImp> listOfKuchen = new ArrayList<KuchenImp>(defaultCapacity);
+    public ArrayList<KuchenImp> listOfKuchen = new ArrayList<KuchenImp>(defaultCapacity);
 
     public KuchenVerwaltung(ArrayList<KuchenImp> listOfKuchen) {
         this.listOfKuchen=listOfKuchen;
@@ -47,17 +47,16 @@ public class KuchenVerwaltung implements java.io.Serializable {
      * @throws IllegalArgumentException if the kuchen don't have a Hersteller
      */
     public synchronized void create(KuchenImp k) throws IllegalArgumentException {
-
-        if (k.getHersteller() == null || k.getHersteller().getName() == null)
-            throw new IllegalArgumentException("Kuchen don't has Hersteller!");
-
+        if (k.getHersteller() == null || k.getHersteller().getName() == null) {
+            throw new IllegalArgumentException("Hersteller cant be null");
+        }
            if(listOfKuchen.size() < defaultCapacity ) {
                for (int i = 0; i < listOfKuchen.size() + 1; i++) {
                    k.setFachnummer(i);
                }
                listOfKuchen.add(k);
            } else {
-                   System.out.println("KuchenVerwaltung is full, cannot insert Kuchen");
+               throw new IndexOutOfBoundsException("KuchenVerwaltung Out of Capacity");
                }
 
     }
@@ -76,6 +75,7 @@ public class KuchenVerwaltung implements java.io.Serializable {
      * @param topping     of the added kuchen
      * @throws IllegalArgumentException if the kuchen don't have a Hersteller
      * @throws IllegalArgumentException if the type of the kuchen is null
+     * @throws IndexOutOfBoundsException if listOfKuchen is out of capacity
      */
     public synchronized void create(KuchenTyp kuchentyp, HerstellerImp hersteller,BigDecimal price, Collection<Allergen> allergens, int naehrwert, Duration haltbarkeit, String... topping) throws IllegalArgumentException {      //Quelle:  https://stackoverflow.com/questions/44640485/implement-a-crud-in-spring-using-an-arraylist-of-a-class
         KuchenImp kuchen = null;
@@ -96,15 +96,10 @@ public class KuchenVerwaltung implements java.io.Serializable {
 
             }
         }
-
         if(listOfKuchen.size() < defaultCapacity ) {
             listOfKuchen.add(kuchen);
             System.out.println("Inserted object" );
-        } else {
-            System.out.println("KuchenVerwaltung is full, cannot insert Kuchen");
-        }
-
-
+        } else throw new IndexOutOfBoundsException("KuchenVerwaltung Out of Capacity");
     }
 
 
@@ -137,12 +132,15 @@ public class KuchenVerwaltung implements java.io.Serializable {
     }
 
 
+
+
     /**
      * updates the Inspektiondate of a given Kremkuchen to todays date
      *
      * @param fachnummer of the Kremkuchen
+     * @throws IndexOutOfBoundsException if there is no Kuchen for the given fachnummer
      */
-    public synchronized void update(int fachnummer) {
+    public synchronized void update(int fachnummer) throws IndexOutOfBoundsException {
         for (KuchenImp k : listOfKuchen) {
             if (k.getFachnummer() == fachnummer) {
                 k.setInspektionsdatum(new Date());
@@ -156,6 +154,7 @@ public class KuchenVerwaltung implements java.io.Serializable {
      *
      * @param fachnummer of the Kuchen to be removed
      * @throws NullPointerException if the list of Kremkuchen is empty
+     * @throws NullPointerException if there is kuchen is null for the given fachnummer
      */
     public synchronized void deleteKuchen(int fachnummer) throws NullPointerException,IllegalArgumentException {
 
@@ -234,43 +233,7 @@ public class KuchenVerwaltung implements java.io.Serializable {
 
 
 
-    /* public static void main(String[] args) {
 
-        KuchenVerwaltung kv = new KuchenVerwaltung();
-
-        HerstellerVerwaltung hv = new HerstellerVerwaltung();
-
-        Collection<Allergen> a1 = new LinkedList<>();
-        a1.add(Allergen.Erdnuss);
-        Collection<Allergen> a2 = new LinkedList<>();
-        a1.add(Allergen.Gluten);
-        Duration d1 = Duration.ofDays(1);
-        BigDecimal p1 =  new BigDecimal("1.5");
-        HerstellerImp h1 = new HerstellerImp("HerstellerNr1");
-        HerstellerImp h2 = new HerstellerImp("HerstellerNr2");
-
-        hv.create(  h1.getName()  );
-
-        kv.create(Kremkuchen, h1 , p1, a1, 10, d1, "Vanille", "Karamell"  );
-        kv.create(Kremkuchen, h2, p1, a2, 10, d1, "Kiwi", "Erdbeeren"  );
-        kv.create(Kremkuchen, h1 , p1, a1, 10, d1, "Vanille", "Karamell"  );
-        kv.create(Kremkuchen, h2, p1, a2, 10, d1, "Kiwi", "Erdbeeren"  );
-
-        System.out.println(kv.readListOfKuchen().length);
-
-
-        for(int i=0; i< hv.readListOfHersteller().length; i++){
-            System.out.println(hv.readListOfHersteller()[i].toString());
-        }
-
-        for(int i=0; i< kv.readListOfKuchen().length; i++){
-            System.out.println(kv.readListOfKuchen()[i].toString());
-        }
-
-
-        }
-
-     */
 
 
     }

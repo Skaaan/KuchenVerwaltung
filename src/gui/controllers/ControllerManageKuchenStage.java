@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import IO.jos.SaveAndLoadJOS;
 import domainLogic.Automat;
 import domainLogic.hersteller.HerstellerImp;
 import domainLogic.hersteller.HerstellerVerwaltung;
@@ -21,10 +22,11 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import static IO.jos.SaveAndLoadJOS.loadAutomatJOS;
-import static IO.jos.SaveAndLoadJOS.saveAutomatJOS;
+
 import static vertrag.KuchenTyp.Kremkuchen;
 import static vertrag.KuchenTyp.Obstkuchen;
+
+
 
 
 public class ControllerManageKuchenStage extends GUI {
@@ -119,6 +121,7 @@ public class ControllerManageKuchenStage extends GUI {
     HerstellerVerwaltung hv = new HerstellerVerwaltung();
 
     Automat automat = new Automat(kv,hv);
+    SaveAndLoadJOS saveAndLoadJOS = new SaveAndLoadJOS(automat);
 
 
 
@@ -126,11 +129,6 @@ public class ControllerManageKuchenStage extends GUI {
     private void initialize() {
         choiceBoxKuchenType.setValue("Select KuchenType");
         choiceBoxKuchenType.getItems().addAll(typeKuchen);
-
-        /*
-        choiceBoxAllergen.setValue("Select Allergen");
-        choiceBoxAllergen.getItems().addAll(allergen);
-         */
 
 
         buttonClickCreateHersteller.setOnAction(new EventHandler<ActionEvent>() {
@@ -247,7 +245,7 @@ public class ControllerManageKuchenStage extends GUI {
             public void handle(javafx.event.ActionEvent event) {
                     deleteKuchen = buttonClickDelete.getText();
                     int fachnummer = Integer.parseInt(textFieldDeleteKuchen.getText()) ;
-                    automat.delete( fachnummer );
+                    automat.deleteKuchen( fachnummer );
                     myListViewKuchen.getItems().remove(fachnummer);
                     allert.setAlertType(Alert.AlertType.INFORMATION);
                     allert.setContentText("Kuchen with fachnummer " + fachnummer + " deleted"  );
@@ -274,14 +272,14 @@ public class ControllerManageKuchenStage extends GUI {
         buttonClickSave.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(javafx.event.ActionEvent event) {
-                saveAutomatJOS( automat);
+                saveAndLoadJOS.saveAutomatJOS(automat);
             }
         });
 
         buttonClickLoad.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(javafx.event.ActionEvent event) {
-                myListViewKuchen.getItems().addAll(     (loadAutomatJOS().readArrayOfKuchen() )     );
+                myListViewKuchen.getItems().addAll(     (saveAndLoadJOS.loadAutomatJOS().readArrayOfKuchen() )     );
             }
         });
 

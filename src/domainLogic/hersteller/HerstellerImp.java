@@ -8,8 +8,6 @@ public class HerstellerImp implements Hersteller, java.io.Serializable {
 
     private String name;
 
-    public HerstellerImp() {
-    }
 
     public HerstellerImp(String name) {
         this.name = name;

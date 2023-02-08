@@ -42,11 +42,8 @@ public class HerstellerVerwaltungTest {
         assertThrows(NullPointerException.class, () -> hv.create(null));
     }
 
-
-    //todo: why does not work
-    /*
     @Test
-    void delete_OneHersteller() {
+    public void deleteHersteller_OneHersteller() {
         // Tests the length of output after deleting the only 1 Hersteller in the list
         //GIVEN
         hv.create("h1");
@@ -57,7 +54,16 @@ public class HerstellerVerwaltungTest {
         //THEN
         assertEquals(0,HerstellerArrayLength);
     }
-     */
+
+
+    @Test
+    public void deleteHersteller_EmptyListOfHersteller() {
+        // Tests the length of output after deleting the only 1 Hersteller in the list
+        assertThrows(NullPointerException.class, () -> {
+            hv.deleteHersteller("h1");
+        });
+    }
+
 
 
     @Test

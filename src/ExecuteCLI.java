@@ -1,18 +1,27 @@
-import java.io.Serializable;
+import CLI.ConsoleImp;
+import IO.jos.SaveAndLoadJOS;
+import domainLogic.Automat;
+import domainLogic.hersteller.HerstellerVerwaltung;
+import domainLogic.kuchen.KuchenVerwaltung;
 
-import static CLI.ConsoleImp.execute;
+
+
 
 
 public class ExecuteCLI {
 
 
+
     public static void main(String[] args) {
+        HerstellerVerwaltung hv = new HerstellerVerwaltung();
+        KuchenVerwaltung kv = new KuchenVerwaltung();
 
-        execute();
+        Automat automat = new Automat(kv, hv);
+        SaveAndLoadJOS saveAndLoadJOS = new SaveAndLoadJOS(automat);
 
+        ConsoleImp consoleImp = new ConsoleImp(automat, saveAndLoadJOS);
+        consoleImp.execute();
     }
-
-
 }
 
 

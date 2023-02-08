@@ -12,21 +12,19 @@ import java.util.Date;
 
 public class KremkuchenImp extends KuchenImp implements Kremkuchen, java.io.Serializable {
 
-    private String kremsorte;
+    private String topping;
 
 
     @Override
     public synchronized String getKremsorte() {
-        return this.kremsorte;
-    }
-
-    public KremkuchenImp() {
+        return this.topping;
     }
 
 
-    public KremkuchenImp(KuchenTyp kuchenType, HerstellerImp hersteller, BigDecimal preis, Collection<Allergen> allergens, int naehrwert, Duration haltbarkeit, Date inspektionsdatum, int fachnummer, String kremsorte) {
+
+    public KremkuchenImp(KuchenTyp kuchenType, HerstellerImp hersteller, BigDecimal preis, Collection<Allergen> allergens, int naehrwert, Duration haltbarkeit, Date inspektionsdatum, int fachnummer, String topping) {
         super(kuchenType ,hersteller,preis, allergens, naehrwert, haltbarkeit, inspektionsdatum, fachnummer);
-        this.kremsorte = kremsorte;
+        this.topping = topping;
     }
 
 

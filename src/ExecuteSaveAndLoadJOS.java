@@ -9,8 +9,7 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import static IO.jos.SaveAndLoadJOS.loadAutomatJOS;
-import static IO.jos.SaveAndLoadJOS.saveAutomatJOS;
+
 import static vertrag.Allergen.Erdnuss;
 import static vertrag.KuchenTyp.Kremkuchen;
 
@@ -18,6 +17,8 @@ public class ExecuteSaveAndLoadJOS {
 
 
     public static void main(String[] args) {
+
+        /*
 
         KuchenVerwaltung kv = new KuchenVerwaltung();
         HerstellerVerwaltung hv = new HerstellerVerwaltung();
@@ -56,8 +57,9 @@ public class ExecuteSaveAndLoadJOS {
 
     }
 
+*/
 
+    }
 
 }
-
 

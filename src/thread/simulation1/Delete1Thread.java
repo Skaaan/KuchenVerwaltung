@@ -18,7 +18,7 @@ public class Delete1Thread extends Thread{
                 synchronized(automat){
                     if (automat.readArrayOfKuchen().length != 0) {
                     int randomIndex = (int) ((Math.random() * automat.readArrayOfKuchen().length));  // generating random index from the list, Source: https://www.baeldung.com/java-random-list-element   //* kv.read().length :random int between 0 and array length
-                        automat.delete(randomIndex);
+                        automat.deleteKuchen(randomIndex);
                     System.err.println("Deleted Kuchen");
                 }
                 }

@@ -5,6 +5,7 @@ import domainLogic.hersteller.HerstellerVerwaltung;
 import domainLogic.kuchen.KuchenImp;
 import domainLogic.kuchen.KuchenVerwaltung;
 import vertrag.Allergen;
+import vertrag.Kuchen;
 import vertrag.KuchenTyp;
 
 import java.io.Serializable;
@@ -21,8 +22,8 @@ public class Automat implements Serializable {
     private final HerstellerVerwaltung hv;
 
 
-    public Automat(KuchenVerwaltung kuchenAdministration, HerstellerVerwaltung herstellerVerwaltung) {
-        this.kv = kuchenAdministration;
+    public Automat(KuchenVerwaltung kuchenVerwaltung, HerstellerVerwaltung herstellerVerwaltung) {
+        this.kv = kuchenVerwaltung;
         this.hv = herstellerVerwaltung;
     }
 
@@ -31,10 +32,16 @@ public class Automat implements Serializable {
         kv.setDefaultCapacity(defaultCapacity);
     }
 
+    public int getDefaultCapacity() {
+        return kv.getDefaultCapacity();
+    }
 
+
+//---Hersteller side------
 
     public synchronized void createHersteller(String name) {
             hv.create(name);
+
     }
 
 
@@ -44,6 +51,11 @@ public class Automat implements Serializable {
 
     public synchronized HerstellerImp[] readListOfHersteller() {
         return hv.readListOfHersteller();
+    }
+
+
+    public synchronized List<HerstellerImp> getListOfHersteller() {
+       return hv.getListOfHersteller();
     }
 
 
@@ -68,6 +80,7 @@ public synchronized Map<HerstellerImp, Integer> listHerstellerWithNumberOfKuchen
     }
 
 
+//---Kuchen side------
 
 
     public synchronized void create(KuchenImp k) throws IllegalArgumentException {
@@ -81,11 +94,6 @@ public synchronized Map<HerstellerImp, Integer> listHerstellerWithNumberOfKuchen
         validateInput(kuchentyp, hersteller, allergens, naehrwert, duration, price, topping);
         if(!hv.containsHersteller(hersteller.getName())){
             throw new IllegalArgumentException("Hersteller (" + hersteller + ") does not exists.");
-        }
-        if (kuchentyp.equals(Kremkuchen) || kuchentyp.equals(Obstkuchen)) {
-            if (topping.length > 1) {
-                throw new IllegalArgumentException("With the given Kuchentyp only one Belag is allowed.");
-            }
         }
         kv.create(kuchentyp, hersteller, price, allergens, naehrwert, duration, topping);
     }
@@ -117,12 +125,17 @@ public synchronized Map<HerstellerImp, Integer> listHerstellerWithNumberOfKuchen
             throw new IllegalArgumentException("Topping cant be null");
         }
         if (topping.length > 2) {
-            throw new IllegalArgumentException("Maximum 2 Topping allowed");
+            throw new IllegalArgumentException("Maximum 2 topping allowed");
+        }
+        if (kuchentyp.equals(Kremkuchen) || kuchentyp.equals(Obstkuchen)) {
+            if (topping.length == 2) {
+                throw new IllegalArgumentException("With " + (kuchentyp) + " only one topping is allowed.");
+            }
         }
     }
 
 
-    public synchronized void delete(int fachnummer) {
+    public synchronized void deleteKuchen(int fachnummer) {
         if (fachnummer < 0) {
             throw new IllegalArgumentException("Fachnummer must be > 0");
         } else {
@@ -153,9 +166,25 @@ public synchronized Map<HerstellerImp, Integer> listHerstellerWithNumberOfKuchen
     }
 
 
+
+    public synchronized Collection<Allergen> getAllergens() {
+        ArrayList<Allergen> allergens = new ArrayList<>();
+        for (int i=0; i< kv.getListOfKuchen().size(); i++) {
+            if ( kv.getListOfKuchen().get(i) != null) {
+                Collection<Allergen> allergene =  kv.getListOfKuchen().get(i).getAllergene();
+                for (Allergen allerg : allergene) {
+                    if(!allergens.contains(allerg))
+                        allergens.add( allerg);
+                }
+            }
+        }
+        return allergens;
+    }
+
+
     /**
      *
-     * @return available allergens in the automat
+     * @return available allergens for input parameter true and not available allergens in the Automat for input parameter false
      */
     public synchronized Collection<Allergen> getAllergenList(boolean inAutomat) {
         if (inAutomat) {
@@ -170,7 +199,6 @@ public synchronized Map<HerstellerImp, Integer> listHerstellerWithNumberOfKuchen
             }
             return listOfAllergens;
         }
-
     }
 
     public synchronized void update(int fachnummer) throws NullPointerException {
@@ -179,67 +207,7 @@ public synchronized Map<HerstellerImp, Integer> listHerstellerWithNumberOfKuchen
 
 
 
-   public static void main(String[] args) {
-        KuchenVerwaltung kv = new KuchenVerwaltung();
-        HerstellerVerwaltung hv = new HerstellerVerwaltung();
 
-        Automat automat = new Automat(kv, hv);
-
-        automat.setDefaultCapacity(20);
-
-
-
-        automat.createHersteller("h1");
-       automat.createHersteller("h2");
-       automat.createHersteller("h3");
-       automat.createHersteller("Mohamed");
-
-         Collection<Allergen> a1 = new LinkedList<>();
-         a1.add(Allergen.Erdnuss);
-         Duration d1  =  Duration.ofDays(1);
-         BigDecimal p1 = new BigDecimal("1.5");
-         HerstellerImp h1 = new HerstellerImp("h1");
-       HerstellerImp h2 = new HerstellerImp("h3");
-       HerstellerImp Mohamed = new HerstellerImp("Mohamed");
-
-        automat.createKuchen(Kremkuchen,h1, p1, a1, 4,  d1, "vanilla" );
-        automat.createKuchen(Kremkuchen,h1, p1, a1, 4,  d1, "vanilla" );
-        automat.createKuchen(Kremkuchen,h2, p1, a1, 4,  d1, "vanilla" );
-        automat.createKuchen(Kremkuchen,h2, p1, a1, 4,  d1, "vanilla" );
-        automat.createKuchen(Kremkuchen,Mohamed, p1, a1, 4,  d1, "vanilla" );
-
-
-        automat.delete(4);
-
-
-        for(int i=0; i<  automat.readListOfHersteller().length; i++) {
-            System.out.println( automat.readListOfHersteller()[i]);
-        }
-
-        System.out.println("-----------------------------------");
-
-        automat.deleteHersteller("h3");
-
-        for(int i=0; i<  automat.readListOfHersteller().length; i++) {
-            System.out.println( automat.readListOfHersteller()[i]);
-        }
-
-        System.out.println("-----------------------------------");
-
-        for(int i=0; i<  automat.readArrayOfKuchen().length; i++) {
-            System.out.println( automat.readArrayOfKuchen()[i]);
-        }
-
-       System.out.println("------------Sorted-----------------------");
-
-       for(int i=0; i<  automat.getArrayOfKuchenByHersteller("h1").length; i++) {
-           System.out.println( automat.getArrayOfKuchenByHersteller("h1")[i]);
-       }
-
-
-
-
-    }
 
 
 

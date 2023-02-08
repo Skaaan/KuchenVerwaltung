@@ -5,6 +5,9 @@ import java.net.Socket;
 
 public class Client {
 
+    public Client() {
+    }
+
     public void start(String hostname, int port) throws IOException {
         Socket clientSocket = new Socket(hostname, port);
         PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -13,12 +16,8 @@ public class Client {
 
 
         String userInput;
-        System.out.println("""
-                     :c Wechsel in den Einfügemodus
-                     :d Wechsel in den Löschmodus
-                     :r Wechsel in den Anzeigemodus
-                     :u Wechsel in den Änderungsmodus
-                    """);
+        System.out.println(" :c Switch to insert mode\n :d Switch to delete mode\n :r Switch to display mode\n :u Switch to change mode\n :p Change to persistence mode\n");
+
         System.out.println("enter Command:");
 
 
@@ -28,9 +27,10 @@ public class Client {
             out.println(userInput);
             // Print the response from the server
             System.out.println("Response from server: " + in.readLine());
-            System.out.println("enter Command");
+            System.out.println("enter Command:");
 
         }
     }
 
 }
+

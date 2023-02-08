@@ -38,8 +38,9 @@ public class Create3Thread extends Thread{
         Duration durationInDays = Duration.ofDays(myDays);           // random haltbarkeit
         double myPrices = random.nextDouble(10) + 1; //random price from 1 to 10
         BigDecimal randomPrice = new BigDecimal(myPrices);
-        int x = 0;
-        KuchenImp randomKuchen = new KuchenImp(randomKuchentyp, new HerstellerImp("h1"), randomPrice, a1, randomNaehrwert, durationInDays, new Date(), x);
+        //random fachnummer between 1 and the default capacity of the automat
+        int randomFachnummer = random.nextInt(kv.getDefaultCapacity()  ) + 1;
+        KuchenImp randomKuchen = new KuchenImp(randomKuchentyp, new HerstellerImp("h1"), randomPrice, a1, randomNaehrwert, durationInDays, new Date(), randomFachnummer  );
         return randomKuchen;
     }
 

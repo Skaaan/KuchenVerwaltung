@@ -23,7 +23,6 @@ public class Create1Thread extends Thread {
 
 
 
-
 public KuchenImp randomKuchen(){
     Random random = new Random();
     //generating random kuchenType
@@ -37,10 +36,11 @@ public KuchenImp randomKuchen(){
     //source: https://stackoverflow.com/questions/66786965/how-can-i-turn-an-int-minutes-into-a-duration-in-java
     int myDays = random.nextInt(15) + 1;
     Duration durationInDays = Duration.ofDays(myDays);           // random haltbarkeit
-    double myPrices = random.nextDouble(10) + 1; //random price from 1 to 10
+    double myPrices = random.nextDouble(10) + 1; //random price between 1 and 10
     BigDecimal randomPrice = new BigDecimal(myPrices);
-    int x = 0;
-    KuchenImp randomKuchen = new KuchenImp(randomKuchentyp, new HerstellerImp("h1"), randomPrice, a1, randomNaehrwert, durationInDays, new Date(),x );
+    //random fachnummer between 1 and the default capacity of the automat
+    int randomFachnummer = random.nextInt(automat.getDefaultCapacity()  ) + 1;
+    KuchenImp randomKuchen = new KuchenImp(randomKuchentyp, new HerstellerImp("h1"), randomPrice, a1, randomNaehrwert, durationInDays, new Date(), randomFachnummer  );
     return randomKuchen;
     }
 
