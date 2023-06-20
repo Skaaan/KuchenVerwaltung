@@ -25,7 +25,7 @@ public class KuchenVerwaltung implements java.io.Serializable {
         this.defaultCapacity = defaultCapacity;
     }
 
-    int defaultCapacity = 30; // TODO Cap in cosnt geben
+    int defaultCapacity = 50;
 
     public ArrayList<KuchenImp> listOfKuchen = new ArrayList<KuchenImp>(defaultCapacity);
 
@@ -160,7 +160,7 @@ public class KuchenVerwaltung implements java.io.Serializable {
 
         if (listOfKuchen.get(fachnummer) == null) {
             throw new IllegalArgumentException("Fachnummer" + fachnummer + "is empty");
-        } else if (listOfKuchen.size() == 0) {    // why ???? //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        } else if (listOfKuchen.size() == 0) {
             throw new NullPointerException("listOfKuchen is empty!");
         } else {
             listOfKuchen.remove(listOfKuchen.get(fachnummer));

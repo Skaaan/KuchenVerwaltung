@@ -1,6 +1,7 @@
 package thread.simulation2;
 
 
+import domainLogic.Automat;
 import domainLogic.hersteller.HerstellerImp;
 import domainLogic.kuchen.KuchenVerwaltung;
 import domainLogic.kuchen.KuchenImp;
@@ -12,28 +13,26 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.*;
 
-public class Create2Thread extends Thread{
-
-    private int capacity1=20;
-     KuchenVerwaltung kv;
+public class Create2Thread  extends Thread {
 
 
-    public Create2Thread(KuchenVerwaltung kv) {
-        this.kv = kv;
+    Automat automat;
 
+
+    public Create2Thread(Automat automat) {
+        this.automat = automat;
     }
 
     public KuchenImp randomKuchen() {
         Random random = new Random();
         //generating random kuchenType
-        KuchenTyp[] values0 = KuchenTyp.values();              // source: https://dirask.com/posts/Java-get-random-element-from-enum-VDK8np
+        KuchenTyp[] values0 = KuchenTyp.values();
         int length0 = values0.length;
         int randIndex0 = new Random().nextInt(length0);
         KuchenTyp randomKuchentyp = values0[randIndex0];
         //(HerstellerImp hersteller, Collection<Allergen> allergen, int naehrwert, Duration haltbarkeit, BigDecimal preis, Date inspektionsdatum, int fachnummer)
         List<Allergen> a1 = new LinkedList<>(Collections.singleton(Allergen.Erdnuss));
         int randomNaehrwert = random.nextInt(10) + 1; //random naehrwert from 1 to 10
-        //source: https://stackoverflow.com/questions/66786965/how-can-i-turn-an-int-minutes-into-a-duration-in-java
         int myDays = random.nextInt(15) + 1;
         Duration durationInDays = Duration.ofDays(myDays);           // random haltbarkeit
         double myPrices = random.nextDouble(10) + 1; //random price from 1 to 10
@@ -43,27 +42,25 @@ public class Create2Thread extends Thread{
         return randomKuchen;
     }
 
-
     @Override
-    public synchronized void run() {
-            while (true) {
-                synchronized (kv) {
+    public void run() {
+        while (true) {
+            synchronized (automat) {
+                if (automat.readArrayOfKuchen().length >= automat.getDefaultCapacity()) {
+                    System.err.println("automat is full wait for kuchen delete");
                     try {
-                        kv.create(randomKuchen());
-                        System.err.println("Created Kuchen");
-                        if (kv.readArrayOfKuchen().length == capacity1) {
-                            kv.wait();
-                        }
+                        automat.wait();
                     } catch (InterruptedException e) {
                     }
-
+                } else {
+                    automat.create(randomKuchen());
+                    System.err.println("Created Kuchen");
                 }
             }
-
+        }
     }
 
 
 
-
-
 }
+

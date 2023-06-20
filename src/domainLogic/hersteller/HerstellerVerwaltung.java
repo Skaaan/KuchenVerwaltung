@@ -1,9 +1,6 @@
 package domainLogic.hersteller;
 
 
-
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +20,6 @@ public class HerstellerVerwaltung implements java.io.Serializable {
         for (HerstellerImp h : listOfHersteller) {
             if (h.getName().equals(name))  {
                 throw new IllegalArgumentException("Name of Hersteller already exists!");
-            } else if (  name == null)  {
-                throw new NullPointerException("Name of Hersteller cant be null!");
             }
         }
 
@@ -40,7 +35,7 @@ public class HerstellerVerwaltung implements java.io.Serializable {
      */
     public void deleteHersteller(String name) throws NullPointerException, IndexOutOfBoundsException  {
         if(listOfHersteller.size() == 0) throw new NullPointerException("HerstellerList is empty!");
-        if(containsHersteller(name) == false){
+        if(!containsHersteller(name)){
             throw new IndexOutOfBoundsException("Hersteller (" + name + ") does not exist in the list");
         }
         for (HerstellerImp h : listOfHersteller) {

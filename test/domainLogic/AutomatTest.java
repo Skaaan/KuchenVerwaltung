@@ -75,7 +75,7 @@ class AutomatTest {
 
     @Test
      void testGetDefaultCapacity() {
-        int expected = 30;
+        int expected = 50;
         int actual = automat.getDefaultCapacity();
         assertEquals(expected, actual);
     }
@@ -589,21 +589,6 @@ class AutomatTest {
         });
     }
 
-    @Test
-    public void testGetAllergenList_InAutomat() {
-        // Arrange
-        Automat automat = mock(Automat.class);
-
-
-        when(automat.getAllergens()).thenReturn(Arrays.asList(Allergen.Erdnuss, Allergen.Erdnuss));
-
-        // Act
-        Collection<Allergen> result = automat.getAllergenList(true);
-
-        // Assert
-        assertEquals(Arrays.asList(Allergen.Erdnuss, Allergen.Gluten), result);
-        verify(automat, times(1)).getAllergens();
-    }
 
     @Test
     void update_Inspectiondate_NotExistingKuchen() {
@@ -615,9 +600,42 @@ class AutomatTest {
     }
 
 
-
-
-
+    @Test
+    public void test_InputWithOnlyNumbers() {
+        //GIVEN
+        String input = "1";
+        //WHEN & THEN
+        boolean result = automat.isNotOnlyNumbers(input);
+        assertFalse(result);
     }
+
+
+    @Test
+    void test_GetAllergenListInAutomat() {
+        //GIVEN
+        automat.createHersteller("h1");
+        automat.createKuchen(Kremkuchen, h1, p1, a1, naehrwert1, d1, "NugatCreme"); //a1 has Erdnuss and Haselnuss
+        Collection<Allergen> allergens = automat.getAllergenList(true);
+        assertEquals("[Erdnuss, Haselnuss]", allergens.toString());
+    }
+
+
+
+    @Test
+    void test_GetAllergensWithAllergen() {
+        automat.createHersteller("h1");
+        automat.createKuchen(Kremkuchen, h1, p1, a1, naehrwert1, d1, "NugatCreme"); //a1 has Erdnuss and Haselnuss
+        Collection<Allergen> allergens = automat.getAllergens();
+        assertTrue(allergens instanceof ArrayList);
+        assertTrue(allergens.contains(Allergen.Haselnuss));
+    }
+
+
+
+
+
+
+
+}
 
 

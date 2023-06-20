@@ -10,16 +10,16 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="851.0" prefWidth="1303.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.ControllerManageKuchenStage">
    <children>
-      <ListView fx:id="myListViewKuchen" layoutX="303.0" layoutY="44.0" prefHeight="214.0" prefWidth="698.0" />
+      <ListView fx:id="myListViewKuchen" layoutX="396.0" layoutY="44.0" prefHeight="214.0" prefWidth="698.0" />
       <TextField fx:id="textFieldHersteller" layoutX="99.0" layoutY="49.0" prefHeight="26.0" prefWidth="119.0" />
-      <TextField fx:id="textFieldPrice" layoutX="74.0" layoutY="82.0" prefHeight="26.0" prefWidth="128.0" />
-      <TextField fx:id="textFieldNaehrwert" layoutX="102.0" layoutY="153.0" prefHeight="26.0" prefWidth="119.0" />
+      <TextField fx:id="textFieldPrice" layoutX="324.0" layoutY="99.0" prefHeight="26.0" prefWidth="66.0" />
+      <TextField fx:id="textFieldNaehrwert" layoutX="103.0" layoutY="162.0" prefHeight="26.0" prefWidth="119.0" />
       <TextField fx:id="textFieldTopping1" layoutX="98.0" layoutY="219.0" prefHeight="26.0" prefWidth="128.0" />
       <Label layoutX="5.0" layoutY="53.0" text="Enter Hersteller:" />
-      <Label layoutX="5.0" layoutY="129.0" text="Enter allergen:" />
-      <Label layoutX="6.0" layoutY="157.0" text="Enter naehrwert" />
+      <Label layoutX="5.0" layoutY="138.0" text="Enter allergen:" />
+      <Label layoutX="6.0" layoutY="166.0" text="Enter naehrwert" />
       <Label layoutX="5.0" layoutY="191.0" prefHeight="18.0" prefWidth="95.0" text="Enter Duration:" />
-      <Label layoutX="7.0" layoutY="86.0" text="Enter price:" />
+      <Label layoutX="9.0" layoutY="103.0" prefHeight="18.0" prefWidth="325.0" text="Enter price (English numbers format  (Comma is &quot;.&quot;  ):" />
       <Label layoutX="6.0" layoutY="223.0" text="Enter Topping1:" />
       <Label layoutX="5.0" layoutY="22.0" prefHeight="18.0" prefWidth="113.0" text="Enter Kuchentype:" />
       <Label layoutX="6.0" layoutY="254.0" text="Enter Topping2:" />
@@ -35,20 +35,20 @@
       <Button fx:id="buttonClickLoad" layoutX="638.0" layoutY="314.0" mnemonicParsing="false" text="Load" />
       <TextField fx:id="textFieldDuration" layoutX="89.0" layoutY="187.0" prefHeight="26.0" prefWidth="119.0" />
       <ChoiceBox fx:id="choiceBoxKuchenType" layoutX="130.0" layoutY="18.0" prefWidth="150.0" />
-      <ListView fx:id="myListViewHersteller" layoutX="1009.0" layoutY="46.0" prefHeight="214.0" prefWidth="186.0" />
-      <Button fx:id="buttonClickCreateHersteller" layoutX="1153.0" layoutY="307.0" mnemonicParsing="false" text="Create Hersteller" />
-      <Button fx:id="buttonClickDeleteHersteller" layoutX="1154.0" layoutY="347.0" mnemonicParsing="false" text="Delete Hersteller" />
-      <TextField fx:id="textFieldCreateHersteller" layoutX="1009.0" layoutY="309.0" prefHeight="26.0" prefWidth="138.0" />
-      <TextField fx:id="textFieldDeleteHersteller" layoutX="1009.0" layoutY="349.0" prefHeight="26.0" prefWidth="138.0" />
-      <TextField fx:id="textFieldAllergen" layoutX="90.0" layoutY="125.0" prefHeight="26.0" prefWidth="205.0" />
+      <ListView fx:id="myListViewHersteller" layoutX="1101.0" layoutY="44.0" prefHeight="214.0" prefWidth="186.0" />
+      <Button fx:id="buttonClickCreateHersteller" layoutX="1175.0" layoutY="307.0" mnemonicParsing="false" text="Create Hersteller" />
+      <Button fx:id="buttonClickDeleteHersteller" layoutX="1176.0" layoutY="347.0" mnemonicParsing="false" text="Delete Hersteller" />
+      <TextField fx:id="textFieldCreateHersteller" layoutX="1032.0" layoutY="313.0" prefHeight="26.0" prefWidth="138.0" />
+      <TextField fx:id="textFieldDeleteHersteller" layoutX="1032.0" layoutY="349.0" prefHeight="26.0" prefWidth="138.0" />
+      <TextField fx:id="textFieldAllergen" layoutX="97.0" layoutY="134.0" prefHeight="26.0" prefWidth="205.0" />
       <Button fx:id="buttonClickSortByHersteller" layoutX="89.0" layoutY="439.0" mnemonicParsing="false" text="Sort By Hersteller:" />
       <TextField fx:id="textFieldSortByHersteller" layoutX="210.0" layoutY="439.0" prefHeight="26.0" prefWidth="167.0" />
-      <Label layoutX="587.0" layoutY="13.0" prefHeight="31.0" prefWidth="138.0" text="List of Kuchen">
+      <Label layoutX="701.0" layoutY="13.0" prefHeight="31.0" prefWidth="138.0" text="List of Kuchen">
          <font>
             <Font size="21.0" />
          </font>
       </Label>
-      <Label layoutX="1033.0" layoutY="13.0" prefHeight="31.0" prefWidth="167.0" text="List of Hersteller">
+      <Label layoutX="1110.0" layoutY="13.0" prefHeight="31.0" prefWidth="167.0" text="List of Hersteller">
          <font>
             <Font size="21.0" />
          </font>

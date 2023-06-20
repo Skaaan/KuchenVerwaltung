@@ -12,7 +12,6 @@ public class ExecuteSimulation1 {
 
 
     public static void main(String[] args) {
-
         Create1Thread myThread1 = new Create1Thread(automat);
         myThread1.start();
 

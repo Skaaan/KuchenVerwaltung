@@ -1,4 +1,4 @@
-import net.Server;
+import net.TCP.Server;
 
 import java.io.IOException;
 
@@ -7,7 +7,6 @@ public class ExecuteServerMain {
 
         Server server = new Server();
         server.start(8888);
-
 
     }
 }

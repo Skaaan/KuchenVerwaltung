@@ -1,3 +1,10 @@
+/**
+ * KuchenVerwaltung Project for Programmierung 3 class
+ * @ version 1.0
+ * @author Skander Ayari MatrikelNr: 579140
+ */
+
+
 package domainLogic;
 
 import domainLogic.hersteller.HerstellerImp;
@@ -5,7 +12,6 @@ import domainLogic.hersteller.HerstellerVerwaltung;
 import domainLogic.kuchen.KuchenImp;
 import domainLogic.kuchen.KuchenVerwaltung;
 import vertrag.Allergen;
-import vertrag.Kuchen;
 import vertrag.KuchenTyp;
 
 import java.io.Serializable;
@@ -39,9 +45,36 @@ public class Automat implements Serializable {
 
 //---Hersteller side------
 
-    public synchronized void createHersteller(String name) {
-            hv.create(name);
+    /**
+     * @param input of String to be checked if contain only number
+     * @return true if input of any character is not a number, false if input contain only number
+     */
+    public synchronized boolean isNotOnlyNumbers(String input) {
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if (!Character.isDigit(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+
+    /**
+     * @param input of String to be checked if contain only empty spaces
+     * @return true if input does not contain only empty spaces, false if input is only spaces
+     */
+    public synchronized boolean isNotOnlySpaces(String input) {
+        input = input.trim();
+        return !input.isEmpty();
+    }
+
+
+
+    public synchronized void createHersteller(String name) throws IllegalArgumentException {
+        if(!isNotOnlyNumbers(name) ) throw new IllegalArgumentException("Hersteller can't contain only numbers");
+        else if(!isNotOnlySpaces(name)) throw new ArrayIndexOutOfBoundsException("Hersteller can't contain empty spaces");
+            hv.create(name);
     }
 
 

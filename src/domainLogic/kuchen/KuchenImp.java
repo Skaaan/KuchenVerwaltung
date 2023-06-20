@@ -14,7 +14,7 @@ import java.util.Date;
 public class KuchenImp implements Kuchen, Verkaufsobjekt, java.io.Serializable {
 
 
-    private  KuchenTyp kuchenType = null;
+    private KuchenTyp kuchenType = null;
     private HerstellerImp hersteller;
     private Collection<Allergen> allergen;
     private int naehrwert;

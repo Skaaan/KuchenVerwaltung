@@ -1,3 +1,4 @@
+import IO.jos.SaveAndLoadJOS;
 import domainLogic.Automat;
 import domainLogic.hersteller.HerstellerImp;
 import domainLogic.hersteller.HerstellerVerwaltung;
@@ -16,15 +17,20 @@ import static vertrag.KuchenTyp.Kremkuchen;
 public class ExecuteSaveAndLoadJOS {
 
 
+
+
     public static void main(String[] args) {
 
-        /*
+
 
         KuchenVerwaltung kv = new KuchenVerwaltung();
         HerstellerVerwaltung hv = new HerstellerVerwaltung();
 
 
         Automat automat = new Automat(kv,hv);
+        automat.setDefaultCapacity(50);
+        SaveAndLoadJOS saveAndLoadJOS = new SaveAndLoadJOS(automat);
+
 
 
         Collection<Allergen> a = new LinkedList<>();
@@ -49,17 +55,17 @@ public class ExecuteSaveAndLoadJOS {
         automat.createKuchen(Kremkuchen, h2, p2,a,10,d,"ChokoKrem");
         automat.createKuchen(Kremkuchen, h2, p3,a,0,d,"nugatKrem");
         //serialisation
-        saveAutomatJOS(automat);
+        saveAndLoadJOS.saveAutomatJOS(automat);
         //deserialisation
-        for(int i = 0; i < loadAutomatJOS().readArrayOfKuchen().length; i++) {
-            System.out.println(loadAutomatJOS().readArrayOfKuchen()[i]);
+        for(int i = 0; i < saveAndLoadJOS.loadAutomatJOS().readArrayOfKuchen().length; i++) {
+            System.out.println(saveAndLoadJOS.loadAutomatJOS().readArrayOfKuchen()[i]);
         }
 
     }
 
-*/
+
 
     }
 
-}
+
 

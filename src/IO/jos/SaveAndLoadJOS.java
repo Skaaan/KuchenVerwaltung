@@ -2,8 +2,7 @@ package IO.jos;
 
 
 import domainLogic.Automat;
-import domainLogic.hersteller.HerstellerVerwaltung;
-import domainLogic.kuchen.KuchenVerwaltung;
+
 
 
 
@@ -20,7 +19,7 @@ public class SaveAndLoadJOS {
         this.automat = automat;
     }
 
-    private static final String FILENAME = "src/IO/jos/savedKuchenVerwaltung.txt";
+    private static final String filename = "src/IO/jos/savedKuchenVerwaltung.txt";
 
     public void serialize(OutputStream out, Automat automat){
         try {
@@ -47,7 +46,7 @@ public class SaveAndLoadJOS {
 
     public void saveAutomatJOS(Automat automat) {
         try {
-            FileOutputStream fileOut = new FileOutputStream(FILENAME);
+            FileOutputStream fileOut = new FileOutputStream(filename);
             serialize(fileOut, automat);
             fileOut.close();
         } catch (IOException e) {
@@ -57,7 +56,7 @@ public class SaveAndLoadJOS {
 
     public Automat loadAutomatJOS() {
         try {
-            FileInputStream fileIn = new FileInputStream(FILENAME);
+            FileInputStream fileIn = new FileInputStream(filename);
             return deserialize(fileIn);
         } catch (IOException e) {
             e.printStackTrace();

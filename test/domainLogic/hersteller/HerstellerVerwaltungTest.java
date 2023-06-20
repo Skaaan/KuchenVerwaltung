@@ -19,7 +19,9 @@ public class HerstellerVerwaltungTest {
     @Test
     void create_Hersteller_NormalCase() {
         // Tests if the passed Kremkuchen to HerstellerVerwaltung hv is not null
+        //GIVEN
         hv.create("Skander");
+        //WHEN & THEN
         HerstellerImp addedHersteller = hv.getListOfHersteller().get(0);
         assertNotNull(addedHersteller);
     }
@@ -133,9 +135,9 @@ public class HerstellerVerwaltungTest {
         //WHEN
         hv.create("Hersteller1");
         hv.create("Hersteller2");
-
         String nonExistentHersteller = "Hersteller3";
         boolean containsNonExistentHersteller = hv.containsHersteller(nonExistentHersteller);
+        //THEN
         assertFalse(containsNonExistentHersteller);
 
     }

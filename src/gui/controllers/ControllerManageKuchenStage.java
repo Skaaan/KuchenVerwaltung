@@ -172,6 +172,7 @@ public class ControllerManageKuchenStage extends GUI {
                 System.err.println(hersteller);
                 textFieldHersteller.setText("");
 
+
                 price = new BigDecimal(textFieldPrice.getText());
                 System.err.println(price);
                 textFieldPrice.setText("");

@@ -8,7 +8,7 @@ import java.beans.XMLEncoder;
 import java.io.*;
 import java.util.List;
 
-public class SaveAndLoadJBP { //TODO: BEAN SCHREIBEN
+public class SaveAndLoadJBP {
 
 
     private static final String filename1 ="src/IO/jbp/beanItems.xml";

@@ -1,44 +1,59 @@
 package thread.simulation2;
 
+import domainLogic.Automat;
 import domainLogic.kuchen.KuchenVerwaltung;
 import domainLogic.kuchen.KuchenImp;
 
-public class Delete2Thread extends Thread{
+public class Delete2Thread extends Thread {
 
-    KuchenVerwaltung kv;
+    Automat automat;
 
-    public Delete2Thread(KuchenVerwaltung kv){
-        this.kv=kv;
+    public Delete2Thread(Automat automat){
+        this.automat=automat;
+    }
+
+
+
+    private KuchenImp getOldestKuchen(Automat automat) {
+        KuchenImp oldestKuchen = null;
+        for(int i = 0; i < automat.readArrayOfKuchen().length; i++) {
+            if (oldestKuchen.getInspektionsdatum().compareTo(automat.readArrayOfKuchen()[i].getInspektionsdatum()) > 0) {
+                oldestKuchen = automat.readArrayOfKuchen()[i];
+            }
+        }
+        return oldestKuchen;
     }
 
 
 
 
     @Override
-    public  void run() {
+    public void run() {
         while (true) {
-            synchronized(kv){
-                if (kv.readArrayOfKuchen().length != 0) {
-                  int oldesKuchenFachnummer = getOldestKuchen(kv).getFachnummer();
-                    kv.deleteKuchen(oldesKuchenFachnummer );
-                    System.err.println("Deleted oldest Kuchen with Fachnummer: "+ oldesKuchenFachnummer +"!");
+            synchronized (automat) {
+                if (automat.readArrayOfKuchen().length == 0) {
+                    try {
+                        System.out.println("Delete Kuchen wait for Create Kuchen");
+                        automat.wait();
+
+                    } catch (InterruptedException e) {
+                    }
+                } else {
+                    automat.deleteKuchen( getOldestKuchen(automat).getFachnummer() );
+                    System.out.println(" Kuchen deleted: " );
+                    automat.notify();
+
                 }
-                notify();
             }
         }
     }
 
 
 
-    private KuchenImp getOldestKuchen(KuchenVerwaltung kv) {
-        KuchenImp oldestKuchen = kv.readArrayOfKuchen()[0];
-        for(int i = 0; i < kv.readArrayOfKuchen().length; i++) {
-            if (oldestKuchen.getInspektionsdatum().compareTo(kv.readArrayOfKuchen()[i].getInspektionsdatum()) > 0) {
-                oldestKuchen = kv.readArrayOfKuchen()[i];
-            }
-        }
-        return oldestKuchen;
-    }
+
+
+
+
 
 
 

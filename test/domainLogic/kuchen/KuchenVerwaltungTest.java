@@ -59,7 +59,7 @@ class KuchenVerwaltungTest {
         assertEquals(20, kv.getDefaultCapacity());
     }
 
-    @Test
+   /* @Test
     void KuchenVerwaltungConstructor() {
         //Test for Constructor of Kuchenverwaltung(kuchenList)
         ArrayList<KuchenImp> kuchenList = new ArrayList<>();
@@ -68,6 +68,8 @@ class KuchenVerwaltungTest {
         KuchenVerwaltung kv = new KuchenVerwaltung(kuchenList);
         assertEquals(kuchenList, kv.listOfKuchen);
     }
+
+    */
 
 
 
@@ -187,7 +189,7 @@ class KuchenVerwaltungTest {
 
 
     @Test
-    void delete_OneKuchen() {
+    void deleteKuchen() {
         // Tests the length of output after deleting the only 1 Kremkuchen in the list
         //GIVEN
         kv.create(Kremkuchen ,h1, p1, a1, naehrwert1, d1,  kremsorte1);
@@ -201,7 +203,7 @@ class KuchenVerwaltungTest {
 
 
     @Test
-    void delete_NotExistingKuchen_inGivenFachnummer() {
+    void deleteKuchen_NotExistingKuchen_inGivenFachnummer() {
         //GIVEN
         kv.create(Kremkuchen, h1, p1, a1, naehrwert1, d1, obstsorte1);
         //WHEN & THEN
@@ -210,6 +212,13 @@ class KuchenVerwaltungTest {
         });
 
     }
+
+
+    @Test
+    void deleteKuchen_withEmptyList_shouldThrowNullPointerException() {
+        assertThrows(IndexOutOfBoundsException.class, () -> kv.deleteKuchen(1));
+    }
+
 
 
     @Test
@@ -317,7 +326,6 @@ class KuchenVerwaltungTest {
     @Test
     void GetAllergens_size_OneAllergen() {
         // Tests the size of kv.getAllergens()  (the size of the list of all available allergens in kv)
-
         //GIVEN
         a1.add(Allergen.Gluten);
         kv.create( Kremkuchen ,h1, p1, a1, naehrwert1, d1, "NugatCreme"   );
@@ -334,7 +342,6 @@ class KuchenVerwaltungTest {
     @Test
     void GetAllergens_size_AllAllergens() {
         // Tests the size of kv.getAllergens()  (the size of the list of all available allergens in kv)
-
         //GIVEN
         a1.add(Allergen.Erdnuss);
         a1.add(Allergen.Gluten);

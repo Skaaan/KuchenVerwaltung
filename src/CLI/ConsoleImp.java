@@ -27,7 +27,7 @@ public class ConsoleImp {
     // Creating a Scanner object for every single input for more clarity
     private final Scanner scan= new Scanner(System.in);
     private final Scanner myKuchenType = new Scanner(System.in);
-     Scanner myHersteller = new Scanner(System.in);
+     Scanner scan1 = new Scanner(System.in);
     private final Scanner myDeleteHersteller = new Scanner(System.in);
 
 
@@ -43,20 +43,14 @@ public class ConsoleImp {
         return scan;
     }
 
-    public String getInputHersteller(){
-        System.out.println("[Herstellername] (creating new Hersteller): ");
-        return myHersteller.nextLine();
-    }
 
-    public String runAddHersteller() throws IllegalStateException {
-            String s = getInputHersteller();
-            automat.createHersteller( s );
-            System.out.println("Hersteller (" + s + ") inserted" );
-            return s;
+    public void runAddHersteller(String hersteller) throws IllegalStateException {
+            automat.createHersteller( hersteller );
+            System.out.println("Hersteller (" + hersteller + ") inserted" );
     }
 
 
-    public void runAddKuchen() throws IllegalStateException {
+    public void runAddKuchen(String addInput) throws IllegalStateException {
         while(true) {
             try {
                 if(automat.getListOfHersteller().size() == 0 ) {
@@ -64,24 +58,23 @@ public class ConsoleImp {
                     break;
                 }
 
-                System.out.println("[Kuchen-Typ] [Herstellername] [Preis] [Naehrwert] [Duration] [Comma separated allergens, single comma for none] [[Obstsorte]] [[Kremsorte]] " +
-                        "adds a kuchen: ");
-                String[] inputKuchen  = scan.nextLine().split(" ");
+                 String[] kuchenInput  = addInput.split(" ");
 
-                KuchenTyp typ = KuchenTyp.valueOf(inputKuchen[0]);
+                KuchenTyp typ = KuchenTyp.valueOf(kuchenInput[0]);
 
-                String hersteller = inputKuchen[1];
+                String hersteller = kuchenInput[1];
                 HerstellerImp h = new HerstellerImp(hersteller);
 
-                String doublePrice = inputKuchen[2];
-                BigDecimal price = new BigDecimal(doublePrice);
+                String doublePriceGerman = kuchenInput[2];
+                String doublePriceEnglish = doublePriceGerman.replace(',', '.');
+                BigDecimal price = new BigDecimal(doublePriceEnglish);
 
-                int naehrwert = Integer.parseInt(inputKuchen[3]);
+                int naehrwert = Integer.parseInt(kuchenInput[3]);
 
-                Duration duration = Duration.ofDays(Integer.parseInt(inputKuchen[4]) );
+                Duration duration = Duration.ofDays(Integer.parseInt(kuchenInput[4]) );
 
                 Collection<Allergen> allergen = new LinkedList<>();
-                String allerg = inputKuchen[5];
+                String allerg = kuchenInput[5];
                 String[] allergParts = new String[4];
                 allergParts = allerg.split(",");
                 if (allergParts.length == 1) {
@@ -115,13 +108,13 @@ public class ConsoleImp {
 
                 //if typ ist Kremkuchen or Obstkuchen, the kuchen can have only one topping
                 if ((typ == Kremkuchen) || (typ == Obstkuchen)) {
-                    String topping1 = inputKuchen[6];
+                    String topping1 = kuchenInput[6];
                     automat.createKuchen(typ, h, price, allergen, naehrwert, duration, topping1);
                     break;
                     //if typ ist Obsttorte, the kuchen can have two topping
                 } else if (typ == Obsttorte) {
-                    String topping1 = inputKuchen[6];
-                    String topping2 = inputKuchen[7];
+                    String topping1 = kuchenInput[6];
+                    String topping2 = kuchenInput[7];
                     automat.createKuchen(typ, h, price, allergen, naehrwert, duration, topping1, topping2);
                     break;
                 }
@@ -151,21 +144,19 @@ public class ConsoleImp {
 
 
 
-    public void runShowKuchenWithType() {
-        System.out.println("kuchen [[Typ]]:");
-        String input = myKuchenType.nextLine();
-        switch (input) {
-            case "Kremkuchen":
+    public void runShowKuchenWithType(KuchenTyp typ) {
+        switch (typ) {
+            case Kremkuchen:
                 for (int i = 0; i < automat.getListOfKuchenByType(Kremkuchen).size(); i++) {
                     System.out.println(automat.getListOfKuchenByType(Kremkuchen).get(i));
                 }
                 break;
-            case "Obstkuchen":
+            case Obstkuchen:
                 for (int i = 0; i < automat.getListOfKuchenByType(Obstkuchen).size(); i++) {
                     System.out.println(automat.getListOfKuchenByType(Obstkuchen).get(i));
                 }
                 break;
-            case "Obsttorte":
+            case Obsttorte:
                 for (int i = 0; i < automat.getListOfKuchenByType(Obsttorte).size(); i++) {
                     System.out.println(automat.getListOfKuchenByType(Obsttorte).get(i));
                 }
@@ -175,21 +166,15 @@ public class ConsoleImp {
 
 
 
-    public void runShowAllergen() {
-        System.out.println("Existing allergens in Automat:");
-        System.out.println( automat.getAllergenList(true) );
-
-        System.out.println("Not existing allergens in Automat:");
-        System.out.println( automat.getAllergenList(false) );
+    public void runShowAllergen(Boolean var) {
+        System.out.println( automat.getAllergenList(var) );
         }
 
 
-    public void runDeleteKuchen(){
+    public void runDeleteKuchen(int fachnummer){
         Scanner scan = getScanner();
         while (true) {
             try{
-                System.out.print("[Fachnummer]:");
-                int fachnummer = scan.nextInt();
                 automat.deleteKuchen(fachnummer);
                 System.out.println("Kuchen deleted");
                 break;
@@ -210,13 +195,11 @@ public class ConsoleImp {
 
 
 
-    public void runDeleteHersteller() {
+    public void runDeleteHersteller(String Hersteller) {
         while(true) {
             try {
-                System.out.println("[Hersteller]: ");
-                String hersteller = myDeleteHersteller.nextLine();
-                automat.deleteHersteller(hersteller);
-                System.out.println("Hersteller (" + hersteller + ") deleted");
+                automat.deleteHersteller(Hersteller);
+                System.out.println("Hersteller (" + Hersteller + ") deleted");
                 break;
             } catch (NullPointerException e) {
                 System.out.println("Automat has no existing Hersteller yet");
@@ -234,7 +217,6 @@ public class ConsoleImp {
 
     public void runUpdateKuchen() {
         Scanner scan = getScanner();
-        System.out.print("[Fachnummer] Enter the Fachnummer of the Kuchen that you want to update:");
         int input = scan.nextInt();
         try {
             automat.update(input);
@@ -245,19 +227,19 @@ public class ConsoleImp {
 
 
     public void runPersistenzmodus(){
+        System.out.println("Persistence mode: ");
+        String input = scan.nextLine();  // Read user input
+        if(input.equals("saveJOS")){
             saveAndLoadJOS.saveAutomatJOS(automat);
-        System.out.println("loaded Kuchen:");
+        } else if(input.equals("loadJOS")){
             for(int i = 0; i < saveAndLoadJOS.loadAutomatJOS().readArrayOfKuchen().length; i++) {
                 System.out.println(saveAndLoadJOS.loadAutomatJOS().readArrayOfKuchen()[i]);
             }
-        System.out.println("loaded Hersteller:");
-
-        for(int i = 0; i < saveAndLoadJOS.loadAutomatJOS().readListOfHersteller().length; i++) {
+            for(int i = 0; i < saveAndLoadJOS.loadAutomatJOS().readListOfHersteller().length; i++) {
                 System.out.println(saveAndLoadJOS.loadAutomatJOS().readListOfHersteller()[i]);
             }
         }
-
-
+    }
 
 
 
@@ -278,22 +260,53 @@ public class ConsoleImp {
                 System.out.println("enter Command");
                 String token = scan.next();
 
+
                 switch (token) {
                     case ":c" -> {
-                        runAddHersteller();
-                        runAddKuchen();
+
+                            String addInput = scan1.nextLine();
+                            String[] s = addInput.split(" ");     //keine leerzeichen keine commands.
+                            if (s.length == 1) {
+                                try {
+                                    runAddHersteller(addInput);
+                                }catch (IllegalArgumentException e){
+                                   e.printStackTrace();
+                                }
+                            } else {
+                                runAddKuchen(addInput);
+                            }
+
                     }
                     case ":d" -> {
-                        runDeleteHersteller();
-                        runDeleteKuchen();
+                        String addInput = scan1.nextLine();
+                        if(!automat.isNotOnlyNumbers(addInput)) {
+                            runDeleteKuchen(  Integer.parseInt(addInput) );
+                        } else if(automat.isNotOnlyNumbers(addInput) ) {
+                            runDeleteHersteller( addInput );
+                        }
                     }
                     case ":u" -> {
                         runUpdateKuchen();
                     }
                     case ":r" -> {
+
+                        String addInput = scan1.nextLine();
+
+                        if (addInput.equals("hersteller")) {
                             runShowHerstellerWithKuchen();
-                            runShowKuchenWithType();
-                            runShowAllergen();
+
+                        } else if (addInput.equals("kuchen Kremkuchen")){
+                            runShowKuchenWithType(Kremkuchen);
+                        } else if (addInput.equals("kuchen Obstkuchen")){
+                            runShowKuchenWithType(Obstkuchen);
+                        } else if (addInput.equals("kuchen Obsttorte")){
+                            runShowKuchenWithType(Obsttorte);
+                        } else if (addInput.equals("allergene i")){
+                            runShowAllergen(true);
+                        }  else if (addInput.equals("allergene e")){
+                            runShowAllergen(true);
+                        }
+
                     }
                     case ":p" -> {
                         runPersistenzmodus();

@@ -14,17 +14,15 @@ import domainLogic.Automat;
 import domainLogic.hersteller.HerstellerImp;
 import domainLogic.hersteller.HerstellerVerwaltung;
 import domainLogic.kuchen.KuchenVerwaltung;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import vertrag.Allergen;
 
 public class SaveAndLoadJOSTest {
 
 
 
-    private static final String FILENAME = "src/IO/jos/savedKuchenVerwaltung.txt";
+    private static final String filename = "src/IO/jos/savedKuchenVerwaltung.txt";
     private SaveAndLoadJOS saveAndLoadJOS;
     private Automat automat;
     private KuchenVerwaltung kv;
@@ -60,7 +58,7 @@ public class SaveAndLoadJOSTest {
     @Test
     void saveAutomatJOS_TestFileNotNull() throws IOException {
         saveAndLoadJOS.saveAutomatJOS(automat);
-        FileInputStream fileIn = new FileInputStream(FILENAME);
+        FileInputStream fileIn = new FileInputStream(filename);
         assertNotNull(fileIn);
         fileIn.close();
     }
@@ -87,7 +85,6 @@ public class SaveAndLoadJOSTest {
         automat.createKuchen( Kremkuchen ,h1, p1, a1, naehrwert1, d1, "NugatCreme");
         saveAndLoadJOS.saveAutomatJOS(automat);
         Automat loadedAutomat = saveAndLoadJOS.loadAutomatJOS();
-
 
         assertEquals(automat.getListOfHersteller().get(0).toString(), loadedAutomat.getListOfHersteller().get(0).toString());
     }

@@ -27,9 +27,6 @@ public class CLITest {
 
 
 
-
-
-
     @BeforeEach
     void setUp() {
         kvMock = mock(KuchenVerwaltung.class);
@@ -42,25 +39,21 @@ public class CLITest {
 
 
 
-    @Test
-    void getInputHerstellerTest() {
-        when(mockScanner.nextLine()).thenReturn("testHersteller");
-        consoleImp.myHersteller = mockScanner;
 
-        String input = consoleImp.getInputHersteller();
-        assertEquals("testHersteller", input);
+
+    @Test
+    public void testRunAddHersteller_validInput() {
+        String hersteller = "Hersteller 1";
+        consoleImp.runAddHersteller(hersteller);
+        Mockito.verify(automat).createHersteller(hersteller);
     }
 
     @Test
-    void runAddHerstellerTest() {
-        when(mockScanner.nextLine()).thenReturn("testHersteller");
-        consoleImp.myHersteller = mockScanner;
-
-        String input = consoleImp.runAddHersteller();
-        assertEquals("testHersteller", input);
-        Mockito.verify(automat).createHersteller("testHersteller");
+    public void testRunAddHersteller_IllegalStateException() {
+        String hersteller = null;
+        Mockito.doThrow(IllegalStateException.class).when(automat).createHersteller(hersteller);
+        assertThrows(IllegalStateException.class, () -> consoleImp.runAddHersteller(hersteller));
     }
-
 
 
     @Test

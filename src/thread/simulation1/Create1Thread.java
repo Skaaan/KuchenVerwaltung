@@ -26,14 +26,13 @@ public class Create1Thread extends Thread {
 public KuchenImp randomKuchen(){
     Random random = new Random();
     //generating random kuchenType
-    KuchenTyp[] values0 = KuchenTyp.values();        // source: https://dirask.com/posts/Java-get-random-element-from-enum-VDK8np
+    KuchenTyp[] values0 = KuchenTyp.values();
     int length0 = values0.length;
     int randIndex0 = new Random().nextInt(length0);
     KuchenTyp randomKuchentyp = values0[randIndex0];
     List<Allergen> a1 = new LinkedList<>(Collections.singleton(Allergen.Erdnuss));
 
     int randomNaehrwert = random.nextInt(10) + 1; //random naehrwert from 1 to 10
-    //source: https://stackoverflow.com/questions/66786965/how-can-i-turn-an-int-minutes-into-a-duration-in-java
     int myDays = random.nextInt(15) + 1;
     Duration durationInDays = Duration.ofDays(myDays);           // random haltbarkeit
     double myPrices = random.nextDouble(10) + 1; //random price between 1 and 10
@@ -49,11 +48,13 @@ public KuchenImp randomKuchen(){
     @Override
     public synchronized void run() {
         while (true) {
-            automat.create(randomKuchen());
-            System.err.println("Created Kuchen");
-            try {
-                Thread.sleep(0);
-            } catch (InterruptedException e) {
+            if(automat.readArrayOfKuchen().length < automat.getDefaultCapacity()) {
+                automat.create(randomKuchen());
+                System.err.println("Created Kuchen");
+                try {
+                    Thread.sleep(0);
+                } catch (InterruptedException e) {
+                }
             }
         }
     }
